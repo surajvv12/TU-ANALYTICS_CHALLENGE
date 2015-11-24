@@ -1,0 +1,236 @@
+---
+title: "Temple_Analytics _Challenge"
+author: "Suraj Vidyadaran"
+date: "Saturday, October 17, 2015"
+output: html_document
+---
+
+This Data analysis is done as a part of Temple University Analytics challenge to perform data analytics on big data. For more details about the challenge visit<http://ibit.temple.edu/analytics/>
+
+The analysis is done in QVC data to answer the following questions:
+
+####1)What are the products and product categories of QVC which sells best in the US market?
+####2)How effective are QVC's campaigns in driving product sales?
+####3)How effective are QVC's on-air broadcast and on-air personalities in driving product sales?
+####4)What is the impact of QVC's social networking presence on driving product sales?
+
+
+##Step 1- Read the data
+
+**Read Customer Master Data**
+
+customer_master <- read.csv("F:/Analytics Challenge/full data/customer_master.csv")
+```{r}
+head(customer_master)
+```
+
+**Read the Email Campaign Data set**
+
+email_campaign <- read.csv("F:/Analytics Challenge/full data/email_campaign.csv")
+
+```{r}
+head(email_campaign)
+```
+
+**Read the Order Master Data set**
+
+order_master <- read.csv("F:/Analytics Challenge/full data/order_master.csv")
+
+
+**Read the Product airtime data**
+
+product_airtime <- read.csv("F:/Analytics Challenge/full data/product_airtime.csv")
+```{r}
+head(product_airtime)
+```
+**Read the Product Master Data**
+
+product_master <- read.csv("F:/Analytics Challenge/full data/product_master.csv")
+```{r}
+head(product_master)
+```
+**Read the Social Network Data**
+
+social <- read.csv("F:/Analytics Challenge/full data/social.csv")
+```{r}
+head(social)
+```
+##Step 2:Exploratory Data Analysis
+
+**1)Customer Master Data**
+```{r}
+#Generating the overall summary
+
+summary(customer_master)
+```
+
+```{r}
+#Sales per  US states
+
+Customer_States<-as.data.frame(table(customer_master$STATE))
+colnames(Customer_States)<-c("State","Sales")
+Customer_States<-Customer_States[order(-Customer_States$Sales),]
+Customer_States
+```
+
+#### A mapping visualization to view the distribution of sales per state
+```{r,message=FALSE,warning=FALSE}
+require(datasets)
+states<-as.data.frame(state.abb)
+colnames(states)<-c("State")
+Customer_States<-merge(states,Customer_States,by="State")
+
+
+library(googleVis)
+States<-gvisGeoChart(Customer_States,"State","Sales",
+                     options=list(region="US",
+                                  displayMode="regions",
+                                  resolution="provinces",
+                                  width=600,height=400))
+plot(States)
+
+
+```
+
+
+```{r}
+#Calculate the percentage of sales per state
+Sales_state_percentage<-as.data.frame(prop.table(table(customer_master$STATE))*100)
+colnames(Sales_state_percentage)<-c("State","Sales_percent")
+Sales_state_percentage<-Sales_state_percentage[order(-Sales_state_percentage$Sales_percent),]
+Sales_state_percentage
+
+
+```
+
+```{r}
+
+# Customer proportion in the code segment
+
+table(customer_master$SHOPPER_SEGMENT_CODE)
+segemnt_code_prop<-prop.table(table(customer_master$SHOPPER_SEGMENT_CODE))
+segemnt_code_prop
+plot(customer_master$SHOPPER_SEGMENT_CODE,col="red",main="Customer Segement distribution",xlab="Segment Code",ylab="Frequency")
+```
+
+```{r}
+#Proportion of yes and no
+table(customer_master$EMAIL_HOLD_IND)
+
+# No of new customer emails
+table(customer_master$EMAIL_JANUARAY_ONLY_HOLD_IND)
+
+#Subsettiing customers with email sent
+customer_email<-subset(customer_master,customer_master$EMAIL_HOLD_IND=="Y")
+head(customer_email)
+
+#If the emails are sent NULL shop segemnt code are more
+table(customer_email$SHOPPER_SEGMENT_CODE)
+```
+
+```{r}
+#Proportion of new customers
+table(customer_master$NEW_CUSTOMER_IND)
+#Plot the new customers
+plot(customer_master$NEW_CUSTOMER_IND,col="green",main="New Customers",xlab="New Customer",ylab="Numbers")
+
+#Calculating the percentage of new customers
+percentage_new_customers<-(new_customers/(new_customers+old_customers))*100
+percentage_new_customers
+library(ggplot2)
+ggplot(customer_master,aes(x=factor(""),fill=NEW_CUSTOMER_IND))+geom_bar()+coord_polar("y",start=0)+scale_x_discrete("")+scale_fill_brewer(palette = "Dark2")
+```
+
+**2)Email Campaign Data**
+```{r}
+#Checking the basic summary and structure
+summary(email_campaign)
+str(email_campaign)
+```
+
+```{r}
+
+#Changing the format of Date and generating a new attribute month
+email_campaign$CAMPAIGN_DATE<-as.Date(email_campaign$CAMPAIGN_DATE,"%m/%d/%Y")
+email_campaign$CAMPAIGN_MONTH<-months(email_campaign$CAMPAIGN_DATE)
+
+#Subsetting the data based on the months
+email_campaign_January<-subset(email_campaign,email_campaign$CAMPAIGN_MONTH=="January")
+head(email_campaign_January)
+
+#Calculating the total money spent on email campaign in January
+total_January<-sum(email_campaign_January$CAMPAIGN_SPEND)
+total_January
+
+#Checking for which categories  more money spent
+table(email_campaign_January$PRODUCT_CATEGORY)
+
+#Analysis of February
+email_campaign_February<-subset(email_campaign,email_campaign$CAMPAIGN_MONTH=="February")
+head(email_campaign_February)
+total_February<-sum(email_campaign_February$CAMPAIGN_SPEND)
+total_February
+table(email_campaign_February$PRODUCT_CATEGORY)
+
+#Analysis of March
+email_campaign_March<-subset(email_campaign,email_campaign$CAMPAIGN_MONTH=="March")
+total_March<-sum(email_campaign_March$CAMPAIGN_SPEND)
+total_March
+head(email_campaign_March)
+table(email_campaign_March$PRODUCT_CATEGORY)
+```
+
+
+**3)Product Master Data**
+
+```{r}
+#Exploring the structure of product master
+str(product_master)
+```
+
+**4) Order Master Data**
+```{r results='hide',message=FALSE,eval=FALSE}
+#Explore the summary and structure
+summary(order_master)
+str(order_master)
+
+#Changing the order date format and creating a new attribute month
+order_master$ORDER_DATE<-as.Date(order_master$ORDER_DATE,"%Y-%m-%d")
+str(order_master$ORDER_DATE)
+order_master$ORDER_MONTH<-months(order_master$ORDER_DATE)
+
+```
+
+
+```{r,eval=FALSE}
+
+#Split and subset order master based on Months
+order_January<-subset(order_master,order_master$ORDER_MONTH=="January")
+order_February<-subset(order_master,order_master$ORDER_MONTH=="February")
+order_March<-subset(order_master,order_master$ORDER_MONTH=="March")
+
+rm(order_master)
+```
+
+**5)Product Airtime Data**
+```{r}
+#Analysing the structure and summary
+summary(product_airtime)
+str(product_airtime)
+
+#Merge product airtime with product master using product number
+product_airtime<-merge(product_master,product_airtime,by="PRODUCT_NBR")
+head(product_airtime)
+
+#Changing the format of the date,sort it and create a new attribute month
+str(product_airtime$ONAIR_DATE)
+product_airtime$ONAIR_DATE<-as.Date(product_airtime$ONAIR_DATE,format = "%Y-%m-%d")
+str(product_airtime$ONAIR_DATE)
+product_airtime<-product_airtime[order(product_airtime$ONAIR_DATE),]
+product_airtime$ONAIR_MONTH<-months(product_airtime$ONAIR_DATE)
+
+# Subset product airtime into three groups based on months
+product_airtime_Jan<-subset(product_airtime,product_airtime$ONAIR_MONTH=="January")
+product_airtime_Feb<-subset(product_airtime,product_airtime$ONAIR_MONTH=="February")
+product_airtime_March<-subset(product_airtime,product_airtime$ONAIR_MONTH=="March")
+```

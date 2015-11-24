@@ -1,0 +1,1289 @@
+---
+title: "Analysis_Q3"
+author: "Suraj Vidyadaran"
+date: "Tuesday, October 27, 2015"
+output: word_document
+---
+#How effective are QVC's on-air broadcast and on-air personalities in driving product sales?
+
+```{r}
+#Summarizing the differnt hosts for the On-air broadcast
+host_Jan<-as.data.frame(table(product_airtime_Jan$HOST1))
+host_Jan<-host_Jan[order(-host_Jan$Freq),]
+host_Jan
+host_Feb<-as.data.frame(table(product_airtime_Feb$HOST1))
+host_Feb<-host_Feb[order(-host_Feb$Freq),]
+host_Feb
+host_Mar<-as.data.frame(table(product_airtime_March$HOST1))
+host_Mar<-host_Mar[order(-host_Mar$Freq),]
+host_Mar
+```
+
+*So we can see a total of 27 hosts for the On-Air broadcast. We have to analyze the impact of the hosts on the sales of products*
+
+
+##Analyzing the impact of various TV hosts on the product sales one by one
+
+###Host 1- Brown Jayne
+```{r}
+library(ggplot2)
+library(grid)
+library(gridExtra)
+Product_airtime_Jan_host1<-subset(product_airtime_Jan,product_airtime_Jan$HOST1=="Brown Jayne")
+Product_airtime_Feb_host1<-subset(product_airtime_Feb,product_airtime_Feb$HOST1=="Brown Jayne")
+Product_airtime_Mar_host1<-subset(product_airtime_March,product_airtime_March$HOST1=="Brown Jayne")
+
+host1_Jan_pd_tb<-as.data.frame(table(Product_airtime_Jan_host1$PRODUCT_DESCRIPTION))
+colnames(host1_Jan_pd_tb)<-c("Product","Airtime_no")
+host1_Jan_pd_tb<-host1_Jan_pd_tb[order(-host1_Jan_pd_tb$Airtime_no),]
+host1_Jan_pd_tb<-host1_Jan_pd_tb[host1_Jan_pd_tb$Airtime_no>0,]
+host1_Jan_results<-merge(host1_Jan_pd_tb,Jan_Order_Prod_desc,by="Product")
+host1_Jan_results<-host1_Jan_results[order(-host1_Jan_results$Airtime_no),]
+head(host1_Jan_results)
+p1<-ggplot(host1_Jan_results,aes(x=Airtime_no,y=Jan_orders))+geom_point(size=5)+geom_smooth(method="lm",se=TRUE)+xlab("Total air time by host Brown Jayne in January")+ylab("Total product sales in January")+ggtitle("Correlation between Host airtime and Product Sales in January")
+cor_host1_Jan<-cor(host1_Jan_results$Airtime_no,host1_Jan_results$Jan_orders)
+cor_host1_Jan
+
+host1_Feb_pd_tb<-as.data.frame(table(Product_airtime_Feb_host1$PRODUCT_DESCRIPTION))
+colnames(host1_Feb_pd_tb)<-c("Product","Airtime_no")
+host1_Feb_pd_tb<-host1_Feb_pd_tb[order(-host1_Feb_pd_tb$Airtime_no),]
+host1_Feb_pd_tb<-host1_Feb_pd_tb[host1_Feb_pd_tb$Airtime_no>0,]
+host1_Feb_results<-merge(host1_Feb_pd_tb,Feb_Order_Prod_desc,by="Product")
+host1_Feb_results<-host1_Feb_results[order(-host1_Feb_results$Airtime_no),]
+head(host1_Feb_results)
+p2<-ggplot(host1_Feb_results,aes(x=Airtime_no,y=Feb_orders))+geom_point(size=5,color="darkgreen")+geom_smooth(method="lm",se=TRUE,color="black")+xlab("Total air time by host Brown Jayne in February")+ylab("Total product sales in February")+ggtitle("Correlation between Host airtime and Product Sales in February")
+cor_host1_Feb<-cor(host1_Feb_results$Airtime_no,host1_Feb_results$Feb_orders)
+cor_host1_Feb
+
+
+host1_Mar_pd_tb<-as.data.frame(table(Product_airtime_Mar_host1$PRODUCT_DESCRIPTION))
+colnames(host1_Mar_pd_tb)<-c("Product","Airtime_no")
+host1_Mar_pd_tb<-host1_Mar_pd_tb[order(-host1_Mar_pd_tb$Airtime_no),]
+host1_Mar_pd_tb<-host1_Mar_pd_tb[host1_Mar_pd_tb$Airtime_no>0,]
+host1_Mar_results<-merge(host1_Mar_pd_tb,Mar_Order_Prod_desc,by="Product")
+host1_Mar_results<-host1_Mar_results[order(-host1_Mar_results$Airtime_no),]
+head(host1_Mar_results)
+p3<-ggplot(host1_Mar_results,aes(x=Airtime_no,y=Mar_orders))+geom_point(size=5,color="orange")+geom_smooth(method="lm",se=TRUE,color="black")+xlab("Total air time by host Brown Jayne in March")+ylab("Total product sales in March")+ggtitle("Correlation between Host airtime and Product Sales in March")
+cor_host1_Mar<-cor(host1_Mar_results$Airtime_no,host1_Mar_results$Mar_orders)
+cor_host1_Mar
+
+print(p1)
+print(p2)
+print(p3)
+```
+
+###Host 2-Stauffer Stacey
+
+```{r}
+library(ggplot2)
+library(grid)
+library(gridExtra)
+Product_airtime_Jan_host2<-subset(product_airtime_Jan,product_airtime_Jan$HOST1=="Stauffer Stacey")
+Product_airtime_Feb_host2<-subset(product_airtime_Feb,product_airtime_Feb$HOST1=="Stauffer Stacey")
+Product_airtime_Mar_host2<-subset(product_airtime_March,product_airtime_March$HOST1=="Stauffer Stacey")
+
+host2_Jan_pd_tb<-as.data.frame(table(Product_airtime_Jan_host2$PRODUCT_DESCRIPTION))
+colnames(host2_Jan_pd_tb)<-c("Product","Airtime_no")
+host2_Jan_pd_tb<-host2_Jan_pd_tb[order(-host2_Jan_pd_tb$Airtime_no),]
+host2_Jan_pd_tb<-host2_Jan_pd_tb[host2_Jan_pd_tb$Airtime_no>0,]
+host2_Jan_results<-merge(host2_Jan_pd_tb,Jan_Order_Prod_desc,by="Product")
+host2_Jan_results<-host2_Jan_results[order(-host2_Jan_results$Airtime_no),]
+head(host2_Jan_results)
+ p1<-ggplot(host2_Jan_results,aes(x=Airtime_no,y=Jan_orders))+geom_point(size=5)+geom_smooth(method="lm",se=TRUE)+xlab("Total air time by host Stauffer Stacey in January")+ylab("Total product sales in January")+ggtitle("Correlation between Host airtime and Product Sales in January")
+cor_host2_Jan<-cor(host2_Jan_results$Airtime_no,host2_Jan_results$Jan_orders)
+cor_host2_Jan
+
+host2_Feb_pd_tb<-as.data.frame(table(Product_airtime_Feb_host2$PRODUCT_DESCRIPTION))
+colnames(host2_Feb_pd_tb)<-c("Product","Airtime_no")
+host2_Feb_pd_tb<-host2_Feb_pd_tb[order(-host2_Feb_pd_tb$Airtime_no),]
+host2_Feb_pd_tb<-host2_Feb_pd_tb[host2_Feb_pd_tb$Airtime_no>0,]
+host2_Feb_results<-merge(host2_Feb_pd_tb,Feb_Order_Prod_desc,by="Product")
+host2_Feb_results<-host2_Feb_results[order(-host2_Feb_results$Airtime_no),]
+head(host2_Feb_results)
+p2<-ggplot(host2_Feb_results,aes(x=Airtime_no,y=Feb_orders))+geom_point(size=5,color="darkgreen")+geom_smooth(method="lm",se=TRUE,color="black")+xlab("Total air time by host Stauffer Stacey in February")+ylab("Total product sales in February")+ggtitle("Correlation between Host airtime and Product Sales in February")
+cor_host2_Feb<-cor(host2_Feb_results$Airtime_no,host2_Feb_results$Feb_orders)
+cor_host2_Feb
+
+host2_Mar_pd_tb<-as.data.frame(table(Product_airtime_Mar_host2$PRODUCT_DESCRIPTION))
+colnames(host2_Mar_pd_tb)<-c("Product","Airtime_no")
+host2_Mar_pd_tb<-host2_Mar_pd_tb[order(-host2_Mar_pd_tb$Airtime_no),]
+host2_Mar_pd_tb<-host2_Mar_pd_tb[host2_Mar_pd_tb$Airtime_no>0,]
+host2_Mar_results<-merge(host2_Mar_pd_tb,Mar_Order_Prod_desc,by="Product")
+host2_Mar_results<-host2_Mar_results[order(-host2_Mar_results$Airtime_no),]
+head(host2_Mar_results)
+p3<-ggplot(host2_Mar_results,aes(x=Airtime_no,y=Mar_orders))+geom_point(size=5,color="orange")+geom_smooth(method="lm",se=TRUE,color="black")+xlab("Total air time by host Stauffer Stacey in March")+ylab("Total product sales in March")+ggtitle("Correlation between Host airtime and Product Sales in March")
+cor_host2_Mar<-cor(host2_Mar_results$Airtime_no,host2_Mar_results$Mar_orders)
+cor_host2_Mar
+
+print(p1)
+print(p2)
+print(p3)
+```
+
+###3)Host 3-Rudolph TreacyJane
+```{r}
+Product_airtime_Jan_host3<-subset(product_airtime_Jan,product_airtime_Jan$HOST1=="Rudolph TreacyJane")
+Product_airtime_Feb_host3<-subset(product_airtime_Feb,product_airtime_Feb$HOST1=="Rudolph TreacyJane")
+Product_airtime_Mar_host3<-subset(product_airtime_March,product_airtime_March$HOST1=="Rudolph TreacyJane")
+
+host3_Jan_pd_tb<-as.data.frame(table(Product_airtime_Jan_host3$PRODUCT_DESCRIPTION))
+colnames(host3_Jan_pd_tb)<-c("Product","Airtime_no")
+host3_Jan_pd_tb<-host3_Jan_pd_tb[order(-host3_Jan_pd_tb$Airtime_no),]
+host3_Jan_pd_tb<-host3_Jan_pd_tb[order(-host3_Jan_pd_tb$Airtime_no),]
+host3_Jan_pd_tb<-host3_Jan_pd_tb[host3_Jan_pd_tb$Airtime_no>0,]
+host3_Jan_results<-merge(host3_Jan_pd_tb,Jan_Order_Prod_desc,by="Product")
+host3_Jan_results<-host3_Jan_results[order(-host3_Jan_results$Airtime_no),]
+head(host3_Jan_results)
+p1<-ggplot(host3_Jan_results,aes(x=Airtime_no,y=Jan_orders))+geom_point(size=5)+geom_smooth(method="lm",se=TRUE)+xlab("Total air time by host Rudolph TreacyJane in January")+ylab("Total product sales in January")+ggtitle("Correlation between Host airtime and Product Sales in January")
+cor_host3_Jan<-cor(host3_Jan_results$Airtime_no,host3_Jan_results$Jan_orders)
+cor_host3_Jan
+
+host3_Feb_pd_tb<-as.data.frame(table(Product_airtime_Feb_host3$PRODUCT_DESCRIPTION))
+colnames(host3_Feb_pd_tb)<-c("Product","Airtime_no")
+host3_Feb_pd_tb<-host3_Feb_pd_tb[order(-host3_Feb_pd_tb$Airtime_no),]
+host3_Feb_pd_tb<-host3_Feb_pd_tb[host3_Feb_pd_tb$Airtime_no>0,]
+host3_Feb_results<-merge(host3_Feb_pd_tb,Feb_Order_Prod_desc,by="Product")
+host3_Feb_results<-host3_Feb_results[order(-host3_Feb_results$Airtime_no),]
+head(host3_Feb_results)
+p2<-ggplot(host3_Feb_results,aes(x=Airtime_no,y=Feb_orders))+geom_point(size=5,color="darkgreen")+geom_smooth(method="lm",se=TRUE,color="black")+xlab("Total air time by host Rudolph TreacyJane in February")+ylab("Total product sales in February")+ggtitle("Correlation between Host airtime and Product Sales in February")
+cor_host3_Feb<-cor(host3_Feb_results$Airtime_no,host3_Feb_results$Feb_orders)
+cor_host3_Feb
+
+host3_Mar_pd_tb<-as.data.frame(table(Product_airtime_Mar_host3$PRODUCT_DESCRIPTION))
+colnames(host3_Mar_pd_tb)<-c("Product","Airtime_no")
+host3_Mar_pd_tb<-host3_Mar_pd_tb[order(-host3_Mar_pd_tb$Airtime_no),]
+host3_Mar_pd_tb<-host3_Mar_pd_tb[host3_Mar_pd_tb$Airtime_no>0,]
+host3_Mar_results<-merge(host3_Mar_pd_tb,Mar_Order_Prod_desc,by="Product")
+host3_Mar_results<-host3_Mar_results[order(-host3_Mar_results$Airtime_no),]
+head(host3_Mar_results)
+p3<-ggplot(host3_Mar_results,aes(x=Airtime_no,y=Mar_orders))+geom_point(size=5,color="orange")+geom_smooth(method="lm",se=TRUE,color="black")+xlab("Total air time by host Rudolph TreacyJane in March")+ylab("Total product sales in March")+ggtitle("Correlation between Host airtime and Product Sales in March")
+cor_host3_Mar<-cor(host3_Mar_results$Airtime_no,host3_Mar_results$Mar_orders)
+cor_host3_Mar
+
+print(p1)
+print(p2)
+print(p3)
+```
+
+###4)Host 4- Hornback Nancy
+```{r}
+Product_airtime_Jan_host4<-subset(product_airtime_Jan,product_airtime_Jan$HOST1=="Hornback Nancy")
+Product_airtime_Feb_host4<-subset(product_airtime_Feb,product_airtime_Feb$HOST1=="Hornback Nancy")
+Product_airtime_Mar_host4<-subset(product_airtime_March,product_airtime_March$HOST1=="Hornback Nancy")
+
+
+host4_Jan_pd_tb<-as.data.frame(table(Product_airtime_Jan_host4$PRODUCT_DESCRIPTION))
+colnames(host4_Jan_pd_tb)<-c("Product","Airtime_no")
+host4_Jan_pd_tb<-host4_Jan_pd_tb[order(-host4_Jan_pd_tb$Airtime_no),]
+host4_Jan_pd_tb<-host4_Jan_pd_tb[order(-host4_Jan_pd_tb$Airtime_no),]
+host4_Jan_pd_tb<-host4_Jan_pd_tb[host4_Jan_pd_tb$Airtime_no>0,]
+host4_Jan_results<-merge(host4_Jan_pd_tb,Jan_Order_Prod_desc,by="Product")
+host4_Jan_results<-host4_Jan_results[order(-host4_Jan_results$Airtime_no),]
+head(host4_Jan_results)
+p1<-ggplot(host4_Jan_results,aes(x=Airtime_no,y=Jan_orders))+geom_point(size=5)+geom_smooth(method="lm",se=TRUE)+xlab("Total air time by host Hornback Nancy in January")+ylab("Total product sales in January")+ggtitle("Correlation between Host airtime and Product Sales in January")
+cor_host4_Jan<-cor(host4_Jan_results$Airtime_no,host4_Jan_results$Jan_orders)
+cor_host4_Jan
+
+host4_Feb_pd_tb<-as.data.frame(table(Product_airtime_Feb_host4$PRODUCT_DESCRIPTION))
+colnames(host4_Feb_pd_tb)<-c("Product","Airtime_no")
+host4_Feb_pd_tb<-host4_Feb_pd_tb[order(-host4_Feb_pd_tb$Airtime_no),]
+host4_Feb_pd_tb<-host4_Feb_pd_tb[host4_Feb_pd_tb$Airtime_no>0,]
+host4_Feb_results<-merge(host4_Feb_pd_tb,Feb_Order_Prod_desc,by="Product")
+host4_Feb_results<-host4_Feb_results[order(-host4_Feb_results$Airtime_no),]
+head(host4_Feb_results)
+p2<-ggplot(host4_Feb_results,aes(x=Airtime_no,y=Feb_orders))+geom_point(size=5,color="darkgreen")+geom_smooth(method="lm",se=TRUE,color="black")+xlab("Total air time by host Hornback Nancy in February")+ylab("Total product sales in February")+ggtitle("Correlation between Host airtime and Product Sales in February")
+cor_host4_Feb<-cor(host4_Feb_results$Airtime_no,host4_Feb_results$Feb_orders)
+cor_host4_Feb
+
+host4_Mar_pd_tb<-as.data.frame(table(Product_airtime_Mar_host4$PRODUCT_DESCRIPTION))
+colnames(host4_Mar_pd_tb)<-c("Product","Airtime_no")
+host4_Mar_pd_tb<-host4_Mar_pd_tb[order(-host4_Mar_pd_tb$Airtime_no),]
+host4_Mar_pd_tb<-host4_Mar_pd_tb[host4_Mar_pd_tb$Airtime_no>0,]
+host4_Mar_results<-merge(host4_Mar_pd_tb,Mar_Order_Prod_desc,by="Product")
+host4_Mar_results<-host4_Mar_results[order(-host4_Mar_results$Airtime_no),]
+head(host4_Mar_results)
+p3<-ggplot(host4_Mar_results,aes(x=Airtime_no,y=Mar_orders))+geom_point(size=5,color="orange")+geom_smooth(method="lm",se=TRUE,color="black")+xlab("Total air time by host Hornback Nancy in March")+ylab("Total product sales in March")+ggtitle("Correlation between Host airtime and Product Sales in March")
+cor_host4_Mar<-cor(host4_Mar_results$Airtime_no,host4_Mar_results$Mar_orders)
+cor_host4_Mar
+
+print(p1)
+print(p2)
+print(p3)
+```
+
+###5)Host 5- Popaj Alberti
+```{r}
+Product_airtime_Jan_host5<-subset(product_airtime_Jan,product_airtime_Jan$HOST1=="Popaj Alberti")
+Product_airtime_Feb_host5<-subset(product_airtime_Feb,product_airtime_Feb$HOST1=="Popaj Alberti")
+Product_airtime_Mar_host5<-subset(product_airtime_March,product_airtime_March$HOST1=="Popaj Alberti")
+
+
+host5_Jan_pd_tb<-as.data.frame(table(Product_airtime_Jan_host5$PRODUCT_DESCRIPTION))
+colnames(host5_Jan_pd_tb)<-c("Product","Airtime_no")
+host5_Jan_pd_tb<-host5_Jan_pd_tb[order(-host5_Jan_pd_tb$Airtime_no),]
+host5_Jan_pd_tb<-host5_Jan_pd_tb[host5_Jan_pd_tb$Airtime_no>0,]
+host5_Jan_results<-merge(host5_Jan_pd_tb,Jan_Order_Prod_desc,by="Product")
+host5_Jan_results<-host5_Jan_results[order(-host5_Jan_results$Airtime_no),]
+head(host5_Jan_results)
+p1<-ggplot(host5_Jan_results,aes(x=Airtime_no,y=Jan_orders))+geom_point(size=5)+geom_smooth(method="lm",se=TRUE)+xlab("Total air time by host Popaj Alberti in January")+ylab("Total product sales in January")+ggtitle("Correlation between Host airtime and Product Sales in January")
+cor_host5_Jan<-cor(host5_Jan_results$Airtime_no,host5_Jan_results$Jan_orders)
+cor_host5_Jan
+
+host5_Feb_pd_tb<-as.data.frame(table(Product_airtime_Feb_host5$PRODUCT_DESCRIPTION))
+colnames(host5_Feb_pd_tb)<-c("Product","Airtime_no")
+host5_Feb_pd_tb<-host5_Feb_pd_tb[order(-host5_Feb_pd_tb$Airtime_no),]
+host5_Feb_pd_tb<-host5_Feb_pd_tb[host5_Feb_pd_tb$Airtime_no>0,]
+host5_Feb_results<-merge(host5_Feb_pd_tb,Feb_Order_Prod_desc,by="Product")
+host5_Feb_results<-host5_Feb_results[order(-host5_Feb_results$Airtime_no),]
+head(host5_Feb_results)
+p2<-ggplot(host5_Feb_results,aes(x=Airtime_no,y=Feb_orders))+geom_point(size=5,color="darkgreen")+geom_smooth(method="lm",se=TRUE,color="black")+xlab("Total air time by host Popaj Alberti in February")+ylab("Total product sales in February")+ggtitle("Correlation between Host airtime and Product Sales in February")
+cor_host5_Feb<-cor(host5_Feb_results$Airtime_no,host5_Feb_results$Feb_orders)
+cor_host5_Feb
+
+host5_Mar_pd_tb<-as.data.frame(table(Product_airtime_Mar_host5$PRODUCT_DESCRIPTION))
+colnames(host5_Mar_pd_tb)<-c("Product","Airtime_no")
+host5_Mar_pd_tb<-host5_Mar_pd_tb[order(-host5_Mar_pd_tb$Airtime_no),]
+host5_Mar_pd_tb<-host5_Mar_pd_tb[host5_Mar_pd_tb$Airtime_no>0,]
+host5_Mar_results<-merge(host5_Mar_pd_tb,Mar_Order_Prod_desc,by="Product")
+host5_Mar_results<-host5_Mar_results[order(-host5_Mar_results$Airtime_no),]
+head(host5_Mar_results)
+p3<-ggplot(host5_Mar_results,aes(x=Airtime_no,y=Mar_orders))+geom_point(size=5,color="orange")+geom_smooth(method="lm",se=TRUE,color="black")+xlab("Total air time by host Popaj Alberti in March")+ylab("Total product sales in March")+ggtitle("Correlation between Host airtime and Product Sales in March")
+cor_host5_Mar<-cor(host5_Mar_results$Airtime_no,host5_Mar_results$Mar_orders)
+cor_host5_Mar
+
+print(p1)
+print(p2)
+print(p3)
+```
+
+###5)Host 5- Popaj Alberti
+```{r}
+Product_airtime_Jan_host5<-subset(product_airtime_Jan,product_airtime_Jan$HOST1=="Popaj Alberti")
+Product_airtime_Feb_host5<-subset(product_airtime_Feb,product_airtime_Feb$HOST1=="Popaj Alberti")
+Product_airtime_Mar_host5<-subset(product_airtime_March,product_airtime_March$HOST1=="Popaj Alberti")
+
+
+host5_Jan_pd_tb<-as.data.frame(table(Product_airtime_Jan_host5$PRODUCT_DESCRIPTION))
+colnames(host5_Jan_pd_tb)<-c("Product","Airtime_no")
+host5_Jan_pd_tb<-host5_Jan_pd_tb[order(-host5_Jan_pd_tb$Airtime_no),]
+host5_Jan_pd_tb<-host5_Jan_pd_tb[host5_Jan_pd_tb$Airtime_no>0,]
+host5_Jan_results<-merge(host5_Jan_pd_tb,Jan_Order_Prod_desc,by="Product")
+host5_Jan_results<-host5_Jan_results[order(-host5_Jan_results$Airtime_no),]
+head(host5_Jan_results)
+p1<-ggplot(host5_Jan_results,aes(x=Airtime_no,y=Jan_orders))+geom_point(size=5)+geom_smooth(method="lm",se=TRUE)+xlab("Total air time by host Popaj Alberti in January")+ylab("Total product sales in January")+ggtitle("Correlation between Host airtime and Product Sales in January")
+cor_host5_Jan<-cor(host5_Jan_results$Airtime_no,host5_Jan_results$Jan_orders)
+cor_host5_Jan
+
+host5_Feb_pd_tb<-as.data.frame(table(Product_airtime_Feb_host5$PRODUCT_DESCRIPTION))
+colnames(host5_Feb_pd_tb)<-c("Product","Airtime_no")
+host5_Feb_pd_tb<-host5_Feb_pd_tb[order(-host5_Feb_pd_tb$Airtime_no),]
+host5_Feb_pd_tb<-host5_Feb_pd_tb[host5_Feb_pd_tb$Airtime_no>0,]
+host5_Feb_results<-merge(host5_Feb_pd_tb,Feb_Order_Prod_desc,by="Product")
+host5_Feb_results<-host5_Feb_results[order(-host5_Feb_results$Airtime_no),]
+head(host5_Feb_results)
+p2<-ggplot(host5_Feb_results,aes(x=Airtime_no,y=Feb_orders))+geom_point(size=5,color="darkgreen")+geom_smooth(method="lm",se=TRUE,color="black")+xlab("Total air time by host Popaj Alberti in February")+ylab("Total product sales in February")+ggtitle("Correlation between Host airtime and Product Sales in February")
+cor_host5_Feb<-cor(host5_Feb_results$Airtime_no,host5_Feb_results$Feb_orders)
+cor_host5_Feb
+
+host5_Mar_pd_tb<-as.data.frame(table(Product_airtime_Mar_host5$PRODUCT_DESCRIPTION))
+colnames(host5_Mar_pd_tb)<-c("Product","Airtime_no")
+host5_Mar_pd_tb<-host5_Mar_pd_tb[order(-host5_Mar_pd_tb$Airtime_no),]
+host5_Mar_pd_tb<-host5_Mar_pd_tb[host5_Mar_pd_tb$Airtime_no>0,]
+host5_Mar_results<-merge(host5_Mar_pd_tb,Mar_Order_Prod_desc,by="Product")
+host5_Mar_results<-host5_Mar_results[order(-host5_Mar_results$Airtime_no),]
+head(host5_Mar_results)
+p3<-ggplot(host5_Mar_results,aes(x=Airtime_no,y=Mar_orders))+geom_point(size=5,color="orange")+geom_smooth(method="lm",se=TRUE,color="black")+xlab("Total air time by host Popaj Alberti in March")+ylab("Total product sales in March")+ggtitle("Correlation between Host airtime and Product Sales in March")
+cor_host5_Mar<-cor(host5_Mar_results$Airtime_no,host5_Mar_results$Mar_orders)
+cor_host5_Mar
+
+print(p1)
+print(p2)
+print(p3)
+```
+
+###6)Host 6- Nester Antonella
+```{r}
+Product_airtime_Jan_host6<-subset(product_airtime_Jan,product_airtime_Jan$HOST1=="Nester Antonella")
+Product_airtime_Feb_host6<-subset(product_airtime_Feb,product_airtime_Feb$HOST1=="Nester Antonella")
+Product_airtime_Mar_host6<-subset(product_airtime_March,product_airtime_March$HOST1=="Nester Antonella")
+
+
+host6_Jan_pd_tb<-as.data.frame(table(Product_airtime_Jan_host6$PRODUCT_DESCRIPTION))
+colnames(host6_Jan_pd_tb)<-c("Product","Airtime_no")
+host6_Jan_pd_tb<-host6_Jan_pd_tb[order(-host6_Jan_pd_tb$Airtime_no),]
+host6_Jan_pd_tb<-host6_Jan_pd_tb[host6_Jan_pd_tb$Airtime_no>0,]
+host6_Jan_results<-merge(host6_Jan_pd_tb,Jan_Order_Prod_desc,by="Product")
+host6_Jan_results<-host6_Jan_results[order(-host6_Jan_results$Airtime_no),]
+head(host6_Jan_results)
+p1<-ggplot(host6_Jan_results,aes(x=Airtime_no,y=Jan_orders))+geom_point(size=5)+geom_smooth(method="lm",se=TRUE)+xlab("Total air time by host Nester Antonella in January")+ylab("Total product sales in January")+ggtitle("Correlation between Host airtime and Product Sales in January")
+cor_host6_Jan<-cor(host6_Jan_results$Airtime_no,host6_Jan_results$Jan_orders)
+cor_host6_Jan
+
+host6_Feb_pd_tb<-as.data.frame(table(Product_airtime_Feb_host6$PRODUCT_DESCRIPTION))
+colnames(host6_Feb_pd_tb)<-c("Product","Airtime_no")
+host6_Feb_pd_tb<-host6_Feb_pd_tb[order(-host6_Feb_pd_tb$Airtime_no),]
+host6_Feb_pd_tb<-host6_Feb_pd_tb[host6_Feb_pd_tb$Airtime_no>0,]
+host6_Feb_results<-merge(host6_Feb_pd_tb,Feb_Order_Prod_desc,by="Product")
+host6_Feb_results<-host6_Feb_results[order(-host6_Feb_results$Airtime_no),]
+head(host6_Feb_results)
+p2<-ggplot(host6_Feb_results,aes(x=Airtime_no,y=Feb_orders))+geom_point(size=5,color="darkgreen")+geom_smooth(method="lm",se=TRUE,color="black")+xlab("Total air time by host Nester Antonella in February")+ylab("Total product sales in February")+ggtitle("Correlation between Host airtime and Product Sales in February")
+cor_host6_Feb<-cor(host6_Feb_results$Airtime_no,host6_Feb_results$Feb_orders)
+cor_host6_Feb
+
+host6_Mar_pd_tb<-as.data.frame(table(Product_airtime_Mar_host6$PRODUCT_DESCRIPTION))
+colnames(host6_Mar_pd_tb)<-c("Product","Airtime_no")
+host6_Mar_pd_tb<-host6_Mar_pd_tb[order(-host6_Mar_pd_tb$Airtime_no),]
+host6_Mar_pd_tb<-host6_Mar_pd_tb[host6_Mar_pd_tb$Airtime_no>0,]
+host6_Mar_results<-merge(host6_Mar_pd_tb,Mar_Order_Prod_desc,by="Product")
+host6_Mar_results<-host6_Mar_results[order(-host6_Mar_results$Airtime_no),]
+head(host6_Mar_results)
+p3<-ggplot(host6_Mar_results,aes(x=Airtime_no,y=Mar_orders))+geom_point(size=5,color="orange")+geom_smooth(method="lm",se=TRUE,color="black")+xlab("Total air time by host Nester Antonella in March")+ylab("Total product sales in March")+ggtitle("Correlation between Host airtime and Product Sales in March")
+cor_host6_Mar<-cor(host6_Mar_results$Airtime_no,host6_Mar_results$Mar_orders)
+cor_host6_Mar
+
+print(p1)
+print(p2)
+print(p3)
+```
+
+###7)Host 7- Williams Leah
+```{r}
+Product_airtime_Jan_host7<-subset(product_airtime_Jan,product_airtime_Jan$HOST1=="Williams Leah")
+Product_airtime_Feb_host7<-subset(product_airtime_Feb,product_airtime_Feb$HOST1=="Williams Leah")
+Product_airtime_Mar_host7<-subset(product_airtime_March,product_airtime_March$HOST1=="Williams Leah")
+
+
+host7_Jan_pd_tb<-as.data.frame(table(Product_airtime_Jan_host7$PRODUCT_DESCRIPTION))
+colnames(host7_Jan_pd_tb)<-c("Product","Airtime_no")
+host7_Jan_pd_tb<-host7_Jan_pd_tb[order(-host7_Jan_pd_tb$Airtime_no),]
+host7_Jan_pd_tb<-host7_Jan_pd_tb[host7_Jan_pd_tb$Airtime_no>0,]
+host7_Jan_results<-merge(host7_Jan_pd_tb,Jan_Order_Prod_desc,by="Product")
+host7_Jan_results<-host7_Jan_results[order(-host7_Jan_results$Airtime_no),]
+head(host7_Jan_results)
+p1<-ggplot(host7_Jan_results,aes(x=Airtime_no,y=Jan_orders))+geom_point(size=5)+geom_smooth(method="lm",se=TRUE)+xlab("Total air time by host Williams Leah in January")+ylab("Total product sales in January")+ggtitle("Correlation between Host airtime and Product Sales in January")
+cor_host7_Jan<-cor(host7_Jan_results$Airtime_no,host7_Jan_results$Jan_orders)
+cor_host7_Jan
+
+host7_Feb_pd_tb<-as.data.frame(table(Product_airtime_Feb_host7$PRODUCT_DESCRIPTION))
+colnames(host7_Feb_pd_tb)<-c("Product","Airtime_no")
+host7_Feb_pd_tb<-host7_Feb_pd_tb[order(-host7_Feb_pd_tb$Airtime_no),]
+host7_Feb_pd_tb<-host7_Feb_pd_tb[host7_Feb_pd_tb$Airtime_no>0,]
+host7_Feb_results<-merge(host7_Feb_pd_tb,Feb_Order_Prod_desc,by="Product")
+host7_Feb_results<-host7_Feb_results[order(-host7_Feb_results$Airtime_no),]
+head(host7_Feb_results)
+p2<-ggplot(host7_Feb_results,aes(x=Airtime_no,y=Feb_orders))+geom_point(size=5,color="darkgreen")+geom_smooth(method="lm",se=TRUE,color="black")+xlab("Total air time by host Williams Leah in February")+ylab("Total product sales in February")+ggtitle("Correlation between Host airtime and Product Sales in February")
+cor_host7_Feb<-cor(host7_Feb_results$Airtime_no,host7_Feb_results$Feb_orders)
+cor_host7_Feb
+
+host7_Mar_pd_tb<-as.data.frame(table(Product_airtime_Mar_host7$PRODUCT_DESCRIPTION))
+colnames(host7_Mar_pd_tb)<-c("Product","Airtime_no")
+host7_Mar_pd_tb<-host7_Mar_pd_tb[order(-host7_Mar_pd_tb$Airtime_no),]
+host7_Mar_pd_tb<-host7_Mar_pd_tb[host7_Mar_pd_tb$Airtime_no>0,]
+host7_Mar_results<-merge(host7_Mar_pd_tb,Mar_Order_Prod_desc,by="Product")
+host7_Mar_results<-host7_Mar_results[order(-host7_Mar_results$Airtime_no),]
+head(host7_Mar_results)
+p3<-ggplot(host7_Mar_results,aes(x=Airtime_no,y=Mar_orders))+geom_point(size=5,color="orange")+geom_smooth(method="lm",se=TRUE,color="black")+xlab("Total air time by host Williams Leah in March")+ylab("Total product sales in March")+ggtitle("Correlation between Host airtime and Product Sales in March")
+cor_host7_Mar<-cor(host7_Mar_results$Airtime_no,host7_Mar_results$Mar_orders)
+cor_host7_Mar
+
+print(p1)
+print(p2)
+print(p3)
+```
+
+###8)Host 8- RoeMary Beth
+
+```{r}
+Product_airtime_Jan_host8<-subset(product_airtime_Jan,product_airtime_Jan$HOST1=="RoeMary Beth")
+Product_airtime_Feb_host8<-subset(product_airtime_Feb,product_airtime_Feb$HOST1=="RoeMary Beth")
+Product_airtime_Mar_host8<-subset(product_airtime_March,product_airtime_March$HOST1=="RoeMary Beth")
+
+
+host8_Jan_pd_tb<-as.data.frame(table(Product_airtime_Jan_host8$PRODUCT_DESCRIPTION))
+colnames(host8_Jan_pd_tb)<-c("Product","Airtime_no")
+host8_Jan_pd_tb<-host8_Jan_pd_tb[order(-host8_Jan_pd_tb$Airtime_no),]
+host8_Jan_pd_tb<-host8_Jan_pd_tb[host8_Jan_pd_tb$Airtime_no>0,]
+host8_Jan_results<-merge(host8_Jan_pd_tb,Jan_Order_Prod_desc,by="Product")
+host8_Jan_results<-host8_Jan_results[order(-host8_Jan_results$Airtime_no),]
+head(host8_Jan_results)
+p1<-ggplot(host8_Jan_results,aes(x=Airtime_no,y=Jan_orders))+geom_point(size=5)+geom_smooth(method="lm",se=TRUE)+xlab("Total air time by host RoeMary Beth in January")+ylab("Total product sales in January")+ggtitle("Correlation between Host airtime and Product Sales in January")
+cor_host8_Jan<-cor(host8_Jan_results$Airtime_no,host8_Jan_results$Jan_orders)
+cor_host8_Jan
+
+host8_Feb_pd_tb<-as.data.frame(table(Product_airtime_Feb_host8$PRODUCT_DESCRIPTION))
+colnames(host8_Feb_pd_tb)<-c("Product","Airtime_no")
+host8_Feb_pd_tb<-host8_Feb_pd_tb[order(-host8_Feb_pd_tb$Airtime_no),]
+host8_Feb_pd_tb<-host8_Feb_pd_tb[host8_Feb_pd_tb$Airtime_no>0,]
+host8_Feb_results<-merge(host8_Feb_pd_tb,Feb_Order_Prod_desc,by="Product")
+host8_Feb_results<-host8_Feb_results[order(-host8_Feb_results$Airtime_no),]
+head(host8_Feb_results)
+p2<-ggplot(host8_Feb_results,aes(x=Airtime_no,y=Feb_orders))+geom_point(size=5,color="darkgreen")+geom_smooth(method="lm",se=TRUE,color="black")+xlab("Total air time by host RoeMary Beth in February")+ylab("Total product sales in February")+ggtitle("Correlation between Host airtime and Product Sales in February")
+cor_host8_Feb<-cor(host8_Feb_results$Airtime_no,host8_Feb_results$Feb_orders)
+cor_host8_Feb
+
+host8_Mar_pd_tb<-as.data.frame(table(Product_airtime_Mar_host8$PRODUCT_DESCRIPTION))
+colnames(host8_Mar_pd_tb)<-c("Product","Airtime_no")
+host8_Mar_pd_tb<-host8_Mar_pd_tb[order(-host8_Mar_pd_tb$Airtime_no),]
+host8_Mar_pd_tb<-host8_Mar_pd_tb[host8_Mar_pd_tb$Airtime_no>0,]
+host8_Mar_results<-merge(host8_Mar_pd_tb,Mar_Order_Prod_desc,by="Product")
+host8_Mar_results<-host8_Mar_results[order(-host8_Mar_results$Airtime_no),]
+head(host8_Mar_results)
+p3<-ggplot(host8_Mar_results,aes(x=Airtime_no,y=Mar_orders))+geom_point(size=5,color="orange")+geom_smooth(method="lm",se=TRUE,color="black")+xlab("Total air time by host RoeMary Beth in March")+ylab("Total product sales in March")+ggtitle("Correlation between Host airtime and Product Sales in March")
+cor_host8_Mar<-cor(host8_Mar_results$Airtime_no,host8_Mar_results$Mar_orders)
+cor_host8_Mar
+
+print(p1)
+print(p2)
+print(p3)
+```
+
+###9)Host 9- Hughes Dan
+
+```{r}
+Product_airtime_Jan_host9<-subset(product_airtime_Jan,product_airtime_Jan$HOST1=="Hughes Dan")
+Product_airtime_Feb_host9<-subset(product_airtime_Feb,product_airtime_Feb$HOST1=="Hughes Dan")
+Product_airtime_Mar_host9<-subset(product_airtime_March,product_airtime_March$HOST1=="Hughes Dan")
+
+
+host9_Jan_pd_tb<-as.data.frame(table(Product_airtime_Jan_host9$PRODUCT_DESCRIPTION))
+colnames(host9_Jan_pd_tb)<-c("Product","Airtime_no")
+host9_Jan_pd_tb<-host9_Jan_pd_tb[order(-host9_Jan_pd_tb$Airtime_no),]
+host9_Jan_pd_tb<-host9_Jan_pd_tb[host9_Jan_pd_tb$Airtime_no>0,]
+host9_Jan_results<-merge(host9_Jan_pd_tb,Jan_Order_Prod_desc,by="Product")
+host9_Jan_results<-host9_Jan_results[order(-host9_Jan_results$Airtime_no),]
+head(host9_Jan_results)
+p1<-ggplot(host9_Jan_results,aes(x=Airtime_no,y=Jan_orders))+geom_point(size=5)+geom_smooth(method="lm",se=TRUE)+xlab("Total air time by host Hughes Dan in January")+ylab("Total product sales in January")+ggtitle("Correlation between Host airtime and Product Sales in January")
+cor_host9_Jan<-cor(host9_Jan_results$Airtime_no,host9_Jan_results$Jan_orders)
+cor_host9_Jan
+
+host9_Feb_pd_tb<-as.data.frame(table(Product_airtime_Feb_host9$PRODUCT_DESCRIPTION))
+colnames(host9_Feb_pd_tb)<-c("Product","Airtime_no")
+host9_Feb_pd_tb<-host9_Feb_pd_tb[order(-host9_Feb_pd_tb$Airtime_no),]
+host9_Feb_pd_tb<-host9_Feb_pd_tb[host9_Feb_pd_tb$Airtime_no>0,]
+host9_Feb_results<-merge(host9_Feb_pd_tb,Feb_Order_Prod_desc,by="Product")
+host9_Feb_results<-host9_Feb_results[order(-host9_Feb_results$Airtime_no),]
+head(host9_Feb_results)
+p2<-ggplot(host9_Feb_results,aes(x=Airtime_no,y=Feb_orders))+geom_point(size=5,color="darkgreen")+geom_smooth(method="lm",se=TRUE,color="black")+xlab("Total air time by host Hughes Dan in February")+ylab("Total product sales in February")+ggtitle("Correlation between Host airtime and Product Sales in February")
+cor_host9_Feb<-cor(host9_Feb_results$Airtime_no,host9_Feb_results$Feb_orders)
+cor_host9_Feb
+
+host9_Mar_pd_tb<-as.data.frame(table(Product_airtime_Mar_host9$PRODUCT_DESCRIPTION))
+colnames(host9_Mar_pd_tb)<-c("Product","Airtime_no")
+host9_Mar_pd_tb<-host9_Mar_pd_tb[order(-host9_Mar_pd_tb$Airtime_no),]
+host9_Mar_pd_tb<-host9_Mar_pd_tb[host9_Mar_pd_tb$Airtime_no>0,]
+host9_Mar_results<-merge(host9_Mar_pd_tb,Mar_Order_Prod_desc,by="Product")
+host9_Mar_results<-host9_Mar_results[order(-host9_Mar_results$Airtime_no),]
+head(host9_Mar_results)
+p3<-ggplot(host9_Mar_results,aes(x=Airtime_no,y=Mar_orders))+geom_point(size=5,color="orange")+geom_smooth(method="lm",se=TRUE,color="black")+xlab("Total air time by host Hughes Dan in March")+ylab("Total product sales in March")+ggtitle("Correlation between Host airtime and Product Sales in March")
+cor_host9_Mar<-cor(host9_Mar_results$Airtime_no,host9_Mar_results$Mar_orders)
+cor_host9_Mar
+
+print(p1)
+print(p2)
+print(p3)
+```
+
+
+###10)Host 10- Killinger Shawn
+
+```{r}
+Product_airtime_Jan_host10<-subset(product_airtime_Jan,product_airtime_Jan$HOST1=="Killinger Shawn")
+Product_airtime_Feb_host10<-subset(product_airtime_Feb,product_airtime_Feb$HOST1=="Killinger Shawn")
+Product_airtime_Mar_host10<-subset(product_airtime_March,product_airtime_March$HOST1=="Killinger Shawn")
+
+
+host10_Jan_pd_tb<-as.data.frame(table(Product_airtime_Jan_host10$PRODUCT_DESCRIPTION))
+colnames(host10_Jan_pd_tb)<-c("Product","Airtime_no")
+host10_Jan_pd_tb<-host10_Jan_pd_tb[order(-host10_Jan_pd_tb$Airtime_no),]
+host10_Jan_pd_tb<-host10_Jan_pd_tb[host10_Jan_pd_tb$Airtime_no>0,]
+host10_Jan_results<-merge(host10_Jan_pd_tb,Jan_Order_Prod_desc,by="Product")
+host10_Jan_results<-host10_Jan_results[order(-host10_Jan_results$Airtime_no),]
+head(host10_Jan_results)
+p1<-ggplot(host10_Jan_results,aes(x=Airtime_no,y=Jan_orders))+geom_point(size=5)+geom_smooth(method="lm",se=TRUE)+xlab("Total air time by host Killinger Shawn in January")+ylab("Total product sales in January")+ggtitle("Correlation between Host airtime and Product Sales in January")
+cor_host10_Jan<-cor(host10_Jan_results$Airtime_no,host10_Jan_results$Jan_orders)
+cor_host10_Jan
+
+host10_Feb_pd_tb<-as.data.frame(table(Product_airtime_Feb_host10$PRODUCT_DESCRIPTION))
+colnames(host10_Feb_pd_tb)<-c("Product","Airtime_no")
+host10_Feb_pd_tb<-host10_Feb_pd_tb[order(-host10_Feb_pd_tb$Airtime_no),]
+host10_Feb_pd_tb<-host10_Feb_pd_tb[host10_Feb_pd_tb$Airtime_no>0,]
+host10_Feb_results<-merge(host10_Feb_pd_tb,Feb_Order_Prod_desc,by="Product")
+host10_Feb_results<-host10_Feb_results[order(-host10_Feb_results$Airtime_no),]
+head(host10_Feb_results)
+p2<-ggplot(host10_Feb_results,aes(x=Airtime_no,y=Feb_orders))+geom_point(size=5,color="darkgreen")+geom_smooth(method="lm",se=TRUE,color="black")+xlab("Total air time by host Killinger Shawn in February")+ylab("Total product sales in February")+ggtitle("Correlation between Host airtime and Product Sales in February")
+cor_host10_Feb<-cor(host10_Feb_results$Airtime_no,host10_Feb_results$Feb_orders)
+cor_host10_Feb
+
+host10_Mar_pd_tb<-as.data.frame(table(Product_airtime_Mar_host10$PRODUCT_DESCRIPTION))
+colnames(host10_Mar_pd_tb)<-c("Product","Airtime_no")
+host10_Mar_pd_tb<-host10_Mar_pd_tb[order(-host10_Mar_pd_tb$Airtime_no),]
+host10_Mar_pd_tb<-host10_Mar_pd_tb[host10_Mar_pd_tb$Airtime_no>0,]
+host10_Mar_results<-merge(host10_Mar_pd_tb,Mar_Order_Prod_desc,by="Product")
+host10_Mar_results<-host10_Mar_results[order(-host10_Mar_results$Airtime_no),]
+head(host10_Mar_results)
+p3<-ggplot(host10_Mar_results,aes(x=Airtime_no,y=Mar_orders))+geom_point(size=5,color="orange")+geom_smooth(method="lm",se=TRUE,color="black")+xlab("Total air time by host Killinger Shawn in March")+ylab("Total product sales in March")+ggtitle("Correlation between Host airtime and Product Sales in March")
+cor_host10_Mar<-cor(host10_Mar_results$Airtime_no,host10_Mar_results$Mar_orders)
+cor_host10_Mar
+
+print(p1)
+print(p2)
+print(p3)
+```
+
+###11)Host 11- James-Dementri Pat
+
+```{r}
+Product_airtime_Jan_host11<-subset(product_airtime_Jan,product_airtime_Jan$HOST1=="James-Dementri Pat")
+Product_airtime_Feb_host11<-subset(product_airtime_Feb,product_airtime_Feb$HOST1=="James-Dementri Pat")
+Product_airtime_Mar_host11<-subset(product_airtime_March,product_airtime_March$HOST1=="James-Dementri Pat")
+
+
+host11_Jan_pd_tb<-as.data.frame(table(Product_airtime_Jan_host11$PRODUCT_DESCRIPTION))
+colnames(host11_Jan_pd_tb)<-c("Product","Airtime_no")
+host11_Jan_pd_tb<-host11_Jan_pd_tb[order(-host11_Jan_pd_tb$Airtime_no),]
+host11_Jan_pd_tb<-host11_Jan_pd_tb[host11_Jan_pd_tb$Airtime_no>0,]
+host11_Jan_results<-merge(host11_Jan_pd_tb,Jan_Order_Prod_desc,by="Product")
+host11_Jan_results<-host11_Jan_results[order(-host11_Jan_results$Airtime_no),]
+head(host11_Jan_results)
+p1<-ggplot(host11_Jan_results,aes(x=Airtime_no,y=Jan_orders))+geom_point(size=5)+geom_smooth(method="lm",se=TRUE)+xlab("Total air time by host James-Dementri Pat in January")+ylab("Total product sales in January")+ggtitle("Correlation between Host airtime and Product Sales in January")
+cor_host11_Jan<-cor(host11_Jan_results$Airtime_no,host11_Jan_results$Jan_orders)
+cor_host11_Jan
+
+host11_Feb_pd_tb<-as.data.frame(table(Product_airtime_Feb_host11$PRODUCT_DESCRIPTION))
+colnames(host11_Feb_pd_tb)<-c("Product","Airtime_no")
+host11_Feb_pd_tb<-host11_Feb_pd_tb[order(-host11_Feb_pd_tb$Airtime_no),]
+host11_Feb_pd_tb<-host11_Feb_pd_tb[host11_Feb_pd_tb$Airtime_no>0,]
+host11_Feb_results<-merge(host11_Feb_pd_tb,Feb_Order_Prod_desc,by="Product")
+host11_Feb_results<-host11_Feb_results[order(-host11_Feb_results$Airtime_no),]
+head(host11_Feb_results)
+p2<-ggplot(host11_Feb_results,aes(x=Airtime_no,y=Feb_orders))+geom_point(size=5,color="darkgreen")+geom_smooth(method="lm",se=TRUE,color="black")+xlab("Total air time by host James-Dementri Pat in February")+ylab("Total product sales in February")+ggtitle("Correlation between Host airtime and Product Sales in February")
+cor_host11_Feb<-cor(host11_Feb_results$Airtime_no,host11_Feb_results$Feb_orders)
+cor_host11_Feb
+
+host11_Mar_pd_tb<-as.data.frame(table(Product_airtime_Mar_host11$PRODUCT_DESCRIPTION))
+colnames(host11_Mar_pd_tb)<-c("Product","Airtime_no")
+host11_Mar_pd_tb<-host11_Mar_pd_tb[order(-host11_Mar_pd_tb$Airtime_no),]
+host11_Mar_pd_tb<-host11_Mar_pd_tb[host11_Mar_pd_tb$Airtime_no>0,]
+host11_Mar_results<-merge(host11_Mar_pd_tb,Mar_Order_Prod_desc,by="Product")
+host11_Mar_results<-host11_Mar_results[order(-host11_Mar_results$Airtime_no),]
+head(host11_Mar_results)
+p3<-ggplot(host11_Mar_results,aes(x=Airtime_no,y=Mar_orders))+geom_point(size=5,color="orange")+geom_smooth(method="lm",se=TRUE,color="black")+xlab("Total air time by host James-Dementri Pat in March")+ylab("Total product sales in March")+ggtitle("Correlation between Host airtime and Product Sales in March")
+cor_host11_Mar<-cor(host11_Mar_results$Airtime_no,host11_Mar_results$Mar_orders)
+cor_host11_Mar
+
+
+print(p1)
+print(p2)
+print(p3)
+```
+
+###12)Host 12- Stran Amy
+
+```{r}
+Product_airtime_Jan_host12<-subset(product_airtime_Jan,product_airtime_Jan$HOST1=="Stran Amy")
+Product_airtime_Feb_host12<-subset(product_airtime_Feb,product_airtime_Feb$HOST1=="Stran Amy")
+Product_airtime_Mar_host12<-subset(product_airtime_March,product_airtime_March$HOST1=="Stran Amy")
+
+
+host12_Jan_pd_tb<-as.data.frame(table(Product_airtime_Jan_host12$PRODUCT_DESCRIPTION))
+colnames(host12_Jan_pd_tb)<-c("Product","Airtime_no")
+host12_Jan_pd_tb<-host12_Jan_pd_tb[order(-host12_Jan_pd_tb$Airtime_no),]
+host12_Jan_pd_tb<-host12_Jan_pd_tb[host12_Jan_pd_tb$Airtime_no>0,]
+host12_Jan_results<-merge(host12_Jan_pd_tb,Jan_Order_Prod_desc,by="Product")
+host12_Jan_results<-host12_Jan_results[order(-host12_Jan_results$Airtime_no),]
+head(host12_Jan_results)
+p1<-ggplot(host12_Jan_results,aes(x=Airtime_no,y=Jan_orders))+geom_point(size=5)+geom_smooth(method="lm",se=TRUE)+xlab("Total air time by host Stran Amy in January")+ylab("Total product sales in January")+ggtitle("Correlation between Host airtime and Product Sales in January")
+cor_host12_Jan<-cor(host12_Jan_results$Airtime_no,host12_Jan_results$Jan_orders)
+cor_host12_Jan
+
+host12_Feb_pd_tb<-as.data.frame(table(Product_airtime_Feb_host12$PRODUCT_DESCRIPTION))
+colnames(host12_Feb_pd_tb)<-c("Product","Airtime_no")
+host12_Feb_pd_tb<-host12_Feb_pd_tb[order(-host12_Feb_pd_tb$Airtime_no),]
+host12_Feb_pd_tb<-host12_Feb_pd_tb[host12_Feb_pd_tb$Airtime_no>0,]
+host12_Feb_results<-merge(host12_Feb_pd_tb,Feb_Order_Prod_desc,by="Product")
+host12_Feb_results<-host12_Feb_results[order(-host12_Feb_results$Airtime_no),]
+head(host12_Feb_results)
+p2<-ggplot(host12_Feb_results,aes(x=Airtime_no,y=Feb_orders))+geom_point(size=5,color="darkgreen")+geom_smooth(method="lm",se=TRUE,color="black")+xlab("Total air time by host Stran Amy in February")+ylab("Total product sales in February")+ggtitle("Correlation between Host airtime and Product Sales in February")
+cor_host12_Feb<-cor(host12_Feb_results$Airtime_no,host12_Feb_results$Feb_orders)
+cor_host12_Feb
+
+host12_Mar_pd_tb<-as.data.frame(table(Product_airtime_Mar_host12$PRODUCT_DESCRIPTION))
+colnames(host12_Mar_pd_tb)<-c("Product","Airtime_no")
+host12_Mar_pd_tb<-host12_Mar_pd_tb[order(-host12_Mar_pd_tb$Airtime_no),]
+host12_Mar_pd_tb<-host12_Mar_pd_tb[host12_Mar_pd_tb$Airtime_no>0,]
+host12_Mar_results<-merge(host12_Mar_pd_tb,Mar_Order_Prod_desc,by="Product")
+host12_Mar_results<-host12_Mar_results[order(-host12_Mar_results$Airtime_no),]
+head(host12_Mar_results)
+p3<-ggplot(host12_Mar_results,aes(x=Airtime_no,y=Mar_orders))+geom_point(size=5,color="orange")+geom_smooth(method="lm",se=TRUE,color="black")+xlab("Total air time by host Stran Amy in March")+ylab("Total product sales in March")+ggtitle("Correlation between Host airtime and Product Sales in March")
+cor_host12_Mar<-cor(host12_Mar_results$Airtime_no,host12_Mar_results$Mar_orders)
+cor_host12_Mar
+
+
+print(p1)
+print(p2)
+print(p3)
+```
+
+###13)Host 13- Bauer Jill
+
+```{r}
+Product_airtime_Jan_host13<-subset(product_airtime_Jan,product_airtime_Jan$HOST1=="Bauer Jill")
+Product_airtime_Feb_host13<-subset(product_airtime_Feb,product_airtime_Feb$HOST1=="Bauer Jill")
+Product_airtime_Mar_host13<-subset(product_airtime_March,product_airtime_March$HOST1=="Bauer Jill")
+
+
+host13_Jan_pd_tb<-as.data.frame(table(Product_airtime_Jan_host13$PRODUCT_DESCRIPTION))
+colnames(host13_Jan_pd_tb)<-c("Product","Airtime_no")
+host13_Jan_pd_tb<-host13_Jan_pd_tb[order(-host13_Jan_pd_tb$Airtime_no),]
+host13_Jan_pd_tb<-host13_Jan_pd_tb[host13_Jan_pd_tb$Airtime_no>0,]
+host13_Jan_results<-merge(host13_Jan_pd_tb,Jan_Order_Prod_desc,by="Product")
+host13_Jan_results<-host13_Jan_results[order(-host13_Jan_results$Airtime_no),]
+head(host13_Jan_results)
+p1<-ggplot(host13_Jan_results,aes(x=Airtime_no,y=Jan_orders))+geom_point(size=5)+geom_smooth(method="lm",se=TRUE)+xlab("Total air time by host Bauer Jill in January")+ylab("Total product sales in January")+ggtitle("Correlation between Host airtime and Product Sales in January")
+cor_host13_Jan<-cor(host13_Jan_results$Airtime_no,host13_Jan_results$Jan_orders)
+cor_host13_Jan
+
+host13_Feb_pd_tb<-as.data.frame(table(Product_airtime_Feb_host13$PRODUCT_DESCRIPTION))
+colnames(host13_Feb_pd_tb)<-c("Product","Airtime_no")
+host13_Feb_pd_tb<-host13_Feb_pd_tb[order(-host13_Feb_pd_tb$Airtime_no),]
+host13_Feb_pd_tb<-host13_Feb_pd_tb[host13_Feb_pd_tb$Airtime_no>0,]
+host13_Feb_results<-merge(host13_Feb_pd_tb,Feb_Order_Prod_desc,by="Product")
+host13_Feb_results<-host13_Feb_results[order(-host13_Feb_results$Airtime_no),]
+head(host13_Feb_results)
+p2<-ggplot(host13_Feb_results,aes(x=Airtime_no,y=Feb_orders))+geom_point(size=5,color="darkgreen")+geom_smooth(method="lm",se=TRUE,color="black")+xlab("Total air time by host Bauer Jill in February")+ylab("Total product sales in February")+ggtitle("Correlation between Host airtime and Product Sales in February")
+cor_host13_Feb<-cor(host13_Feb_results$Airtime_no,host13_Feb_results$Feb_orders)
+cor_host13_Feb
+
+host13_Mar_pd_tb<-as.data.frame(table(Product_airtime_Mar_host13$PRODUCT_DESCRIPTION))
+colnames(host13_Mar_pd_tb)<-c("Product","Airtime_no")
+host13_Mar_pd_tb<-host13_Mar_pd_tb[order(-host13_Mar_pd_tb$Airtime_no),]
+host13_Mar_pd_tb<-host13_Mar_pd_tb[host13_Mar_pd_tb$Airtime_no>0,]
+host13_Mar_results<-merge(host13_Mar_pd_tb,Mar_Order_Prod_desc,by="Product")
+host13_Mar_results<-host13_Mar_results[order(-host13_Mar_results$Airtime_no),]
+head(host13_Mar_results)
+p3<-ggplot(host13_Mar_results,aes(x=Airtime_no,y=Mar_orders))+geom_point(size=5,color="orange")+geom_smooth(method="lm",se=TRUE,color="black")+xlab("Total air time by host Bauer Jill in March")+ylab("Total product sales in March")+ggtitle("Correlation between Host airtime and Product Sales in March")
+cor_host13_Mar<-cor(host13_Mar_results$Airtime_no,host13_Mar_results$Mar_orders)
+cor_host13_Mar
+
+
+print(p1)
+print(p2)
+print(p3)
+```
+
+###14)Host 14- Domeier Rick
+
+```{r}
+Product_airtime_Jan_host14<-subset(product_airtime_Jan,product_airtime_Jan$HOST1=="Domeier Rick")
+Product_airtime_Feb_host14<-subset(product_airtime_Feb,product_airtime_Feb$HOST1=="Domeier Rick")
+Product_airtime_Mar_host14<-subset(product_airtime_March,product_airtime_March$HOST1=="Domeier Rick")
+
+
+host14_Jan_pd_tb<-as.data.frame(table(Product_airtime_Jan_host14$PRODUCT_DESCRIPTION))
+colnames(host14_Jan_pd_tb)<-c("Product","Airtime_no")
+host14_Jan_pd_tb<-host14_Jan_pd_tb[order(-host14_Jan_pd_tb$Airtime_no),]
+host14_Jan_pd_tb<-host14_Jan_pd_tb[host14_Jan_pd_tb$Airtime_no>0,]
+host14_Jan_results<-merge(host14_Jan_pd_tb,Jan_Order_Prod_desc,by="Product")
+host14_Jan_results<-host14_Jan_results[order(-host14_Jan_results$Airtime_no),]
+head(host14_Jan_results)
+p1<-ggplot(host14_Jan_results,aes(x=Airtime_no,y=Jan_orders))+geom_point(size=5)+geom_smooth(method="lm",se=TRUE)+xlab("Total air time by host Domeier Rick in January")+ylab("Total product sales in January")+ggtitle("Correlation between Host airtime and Product Sales in January")
+cor_host14_Jan<-cor(host14_Jan_results$Airtime_no,host14_Jan_results$Jan_orders)
+cor_host14_Jan
+
+host14_Feb_pd_tb<-as.data.frame(table(Product_airtime_Feb_host14$PRODUCT_DESCRIPTION))
+colnames(host14_Feb_pd_tb)<-c("Product","Airtime_no")
+host14_Feb_pd_tb<-host14_Feb_pd_tb[order(-host14_Feb_pd_tb$Airtime_no),]
+host14_Feb_pd_tb<-host14_Feb_pd_tb[host14_Feb_pd_tb$Airtime_no>0,]
+host14_Feb_results<-merge(host14_Feb_pd_tb,Feb_Order_Prod_desc,by="Product")
+host14_Feb_results<-host14_Feb_results[order(-host14_Feb_results$Airtime_no),]
+head(host14_Feb_results)
+p2<-ggplot(host14_Feb_results,aes(x=Airtime_no,y=Feb_orders))+geom_point(size=5,color="darkgreen")+geom_smooth(method="lm",se=TRUE,color="black")+xlab("Total air time by host Domeier Rick in February")+ylab("Total product sales in February")+ggtitle("Correlation between Host airtime and Product Sales in February")
+cor_host14_Feb<-cor(host14_Feb_results$Airtime_no,host14_Feb_results$Feb_orders)
+cor_host14_Feb
+
+host14_Mar_pd_tb<-as.data.frame(table(Product_airtime_Mar_host14$PRODUCT_DESCRIPTION))
+colnames(host14_Mar_pd_tb)<-c("Product","Airtime_no")
+host14_Mar_pd_tb<-host14_Mar_pd_tb[order(-host14_Mar_pd_tb$Airtime_no),]
+host14_Mar_pd_tb<-host14_Mar_pd_tb[host14_Mar_pd_tb$Airtime_no>0,]
+host14_Mar_results<-merge(host14_Mar_pd_tb,Mar_Order_Prod_desc,by="Product")
+host14_Mar_results<-host14_Mar_results[order(-host14_Mar_results$Airtime_no),]
+head(host14_Mar_results)
+p3<-ggplot(host14_Mar_results,aes(x=Airtime_no,y=Mar_orders))+geom_point(size=5,color="orange")+geom_smooth(method="lm",se=TRUE,color="black")+xlab("Total air time by host Domeier Rick in March")+ylab("Total product sales in March")+ggtitle("Correlation between Host airtime and Product Sales in March")
+cor_host14_Mar<-cor(host14_Mar_results$Airtime_no,host14_Mar_results$Mar_orders)
+cor_host14_Mar
+
+
+print(p1)
+print(p2)
+print(p3)
+```
+
+###15)Host 15- Gonzales Jacque
+
+```{r}
+Product_airtime_Jan_host15<-subset(product_airtime_Jan,product_airtime_Jan$HOST1=="Gonzales Jacque")
+Product_airtime_Feb_host15<-subset(product_airtime_Feb,product_airtime_Feb$HOST1=="Gonzales Jacque")
+Product_airtime_Mar_host15<-subset(product_airtime_March,product_airtime_March$HOST1=="Gonzales Jacque")
+
+
+host15_Jan_pd_tb<-as.data.frame(table(Product_airtime_Jan_host15$PRODUCT_DESCRIPTION))
+colnames(host15_Jan_pd_tb)<-c("Product","Airtime_no")
+host15_Jan_pd_tb<-host15_Jan_pd_tb[order(-host15_Jan_pd_tb$Airtime_no),]
+host15_Jan_pd_tb<-host15_Jan_pd_tb[host15_Jan_pd_tb$Airtime_no>0,]
+host15_Jan_results<-merge(host15_Jan_pd_tb,Jan_Order_Prod_desc,by="Product")
+host15_Jan_results<-host15_Jan_results[order(-host15_Jan_results$Airtime_no),]
+head(host15_Jan_results)
+p1<-ggplot(host15_Jan_results,aes(x=Airtime_no,y=Jan_orders))+geom_point(size=5)+geom_smooth(method="lm",se=TRUE)+xlab("Total air time by host Gonzales Jacque in January")+ylab("Total product sales in January")+ggtitle("Correlation between Host airtime and Product Sales in January")
+cor_host15_Jan<-cor(host15_Jan_results$Airtime_no,host15_Jan_results$Jan_orders)
+cor_host15_Jan
+
+host15_Feb_pd_tb<-as.data.frame(table(Product_airtime_Feb_host15$PRODUCT_DESCRIPTION))
+colnames(host15_Feb_pd_tb)<-c("Product","Airtime_no")
+host15_Feb_pd_tb<-host15_Feb_pd_tb[order(-host15_Feb_pd_tb$Airtime_no),]
+host15_Feb_pd_tb<-host15_Feb_pd_tb[host15_Feb_pd_tb$Airtime_no>0,]
+host15_Feb_results<-merge(host15_Feb_pd_tb,Feb_Order_Prod_desc,by="Product")
+host15_Feb_results<-host15_Feb_results[order(-host15_Feb_results$Airtime_no),]
+head(host15_Feb_results)
+p2<-ggplot(host15_Feb_results,aes(x=Airtime_no,y=Feb_orders))+geom_point(size=5,color="darkgreen")+geom_smooth(method="lm",se=TRUE,color="black")+xlab("Total air time by host Gonzales Jacque in February")+ylab("Total product sales in February")+ggtitle("Correlation between Host airtime and Product Sales in February")
+cor_host15_Feb<-cor(host15_Feb_results$Airtime_no,host15_Feb_results$Feb_orders)
+cor_host15_Feb
+
+host15_Mar_pd_tb<-as.data.frame(table(Product_airtime_Mar_host15$PRODUCT_DESCRIPTION))
+colnames(host15_Mar_pd_tb)<-c("Product","Airtime_no")
+host15_Mar_pd_tb<-host15_Mar_pd_tb[order(-host15_Mar_pd_tb$Airtime_no),]
+host15_Mar_pd_tb<-host15_Mar_pd_tb[host15_Mar_pd_tb$Airtime_no>0,]
+host15_Mar_results<-merge(host15_Mar_pd_tb,Mar_Order_Prod_desc,by="Product")
+host15_Mar_results<-host15_Mar_results[order(-host15_Mar_results$Airtime_no),]
+head(host15_Mar_results)
+p3<-ggplot(host15_Mar_results,aes(x=Airtime_no,y=Mar_orders))+geom_point(size=5,color="orange")+geom_smooth(method="lm",se=TRUE,color="black")+xlab("Total air time by host Gonzales Jacque in March")+ylab("Total product sales in March")+ggtitle("Correlation between Host airtime and Product Sales in March")
+cor_host15_Mar<-cor(host15_Mar_results$Airtime_no,host15_Mar_results$Mar_orders)
+cor_host15_Mar
+
+
+print(p1)
+print(p2)
+print(p3)
+```
+
+
+###16)Host 16- Lindquist Kerstin
+
+```{r}
+Product_airtime_Jan_host16<-subset(product_airtime_Jan,product_airtime_Jan$HOST1=="Lindquist Kerstin")
+Product_airtime_Feb_host16<-subset(product_airtime_Feb,product_airtime_Feb$HOST1=="Lindquist Kerstin")
+Product_airtime_Mar_host16<-subset(product_airtime_March,product_airtime_March$HOST1=="Lindquist Kerstin")
+
+
+host16_Jan_pd_tb<-as.data.frame(table(Product_airtime_Jan_host16$PRODUCT_DESCRIPTION))
+colnames(host16_Jan_pd_tb)<-c("Product","Airtime_no")
+host16_Jan_pd_tb<-host16_Jan_pd_tb[order(-host16_Jan_pd_tb$Airtime_no),]
+host16_Jan_pd_tb<-host16_Jan_pd_tb[host16_Jan_pd_tb$Airtime_no>0,]
+host16_Jan_results<-merge(host16_Jan_pd_tb,Jan_Order_Prod_desc,by="Product")
+host16_Jan_results<-host16_Jan_results[order(-host16_Jan_results$Airtime_no),]
+head(host16_Jan_results)
+p1<-ggplot(host16_Jan_results,aes(x=Airtime_no,y=Jan_orders))+geom_point(size=5)+geom_smooth(method="lm",se=TRUE)+xlab("Total air time by host Lindquist Kerstin in January")+ylab("Total product sales in January")+ggtitle("Correlation between Host airtime and Product Sales in January")
+cor_host16_Jan<-cor(host16_Jan_results$Airtime_no,host16_Jan_results$Jan_orders)
+cor_host16_Jan
+
+host16_Feb_pd_tb<-as.data.frame(table(Product_airtime_Feb_host16$PRODUCT_DESCRIPTION))
+colnames(host16_Feb_pd_tb)<-c("Product","Airtime_no")
+host16_Feb_pd_tb<-host16_Feb_pd_tb[order(-host16_Feb_pd_tb$Airtime_no),]
+host16_Feb_pd_tb<-host16_Feb_pd_tb[host16_Feb_pd_tb$Airtime_no>0,]
+host16_Feb_results<-merge(host16_Feb_pd_tb,Feb_Order_Prod_desc,by="Product")
+host16_Feb_results<-host16_Feb_results[order(-host16_Feb_results$Airtime_no),]
+head(host16_Feb_results)
+p2<-ggplot(host16_Feb_results,aes(x=Airtime_no,y=Feb_orders))+geom_point(size=5,color="darkgreen")+geom_smooth(method="lm",se=TRUE,color="black")+xlab("Total air time by host Lindquist Kerstin in February")+ylab("Total product sales in February")+ggtitle("Correlation between Host airtime and Product Sales in February")
+cor_host16_Feb<-cor(host16_Feb_results$Airtime_no,host16_Feb_results$Feb_orders)
+cor_host16_Feb
+
+host16_Mar_pd_tb<-as.data.frame(table(Product_airtime_Mar_host16$PRODUCT_DESCRIPTION))
+colnames(host16_Mar_pd_tb)<-c("Product","Airtime_no")
+host16_Mar_pd_tb<-host16_Mar_pd_tb[order(-host16_Mar_pd_tb$Airtime_no),]
+host16_Mar_pd_tb<-host16_Mar_pd_tb[host16_Mar_pd_tb$Airtime_no>0,]
+host16_Mar_results<-merge(host16_Mar_pd_tb,Mar_Order_Prod_desc,by="Product")
+host16_Mar_results<-host16_Mar_results[order(-host16_Mar_results$Airtime_no),]
+head(host16_Mar_results)
+p3<-ggplot(host16_Mar_results,aes(x=Airtime_no,y=Mar_orders))+geom_point(size=5,color="orange")+geom_smooth(method="lm",se=TRUE,color="black")+xlab("Total air time by host Lindquist Kerstin in March")+ylab("Total product sales in March")+ggtitle("Correlation between Host airtime and Product Sales in March")
+cor_host16_Mar<-cor(host16_Mar_results$Airtime_no,host16_Mar_results$Mar_orders)
+cor_host16_Mar
+
+
+print(p1)
+print(p2)
+print(p3)
+```
+
+
+###17)Host 17- Coffey Jennifer
+
+```{r}
+Product_airtime_Jan_host17<-subset(product_airtime_Jan,product_airtime_Jan$HOST1=="Coffey Jennifer")
+Product_airtime_Feb_host17<-subset(product_airtime_Feb,product_airtime_Feb$HOST1=="Coffey Jennifer")
+Product_airtime_Mar_host17<-subset(product_airtime_March,product_airtime_March$HOST1=="Coffey Jennifer")
+
+
+host17_Jan_pd_tb<-as.data.frame(table(Product_airtime_Jan_host17$PRODUCT_DESCRIPTION))
+colnames(host17_Jan_pd_tb)<-c("Product","Airtime_no")
+host17_Jan_pd_tb<-host17_Jan_pd_tb[order(-host17_Jan_pd_tb$Airtime_no),]
+host17_Jan_pd_tb<-host17_Jan_pd_tb[host17_Jan_pd_tb$Airtime_no>0,]
+host17_Jan_results<-merge(host17_Jan_pd_tb,Jan_Order_Prod_desc,by="Product")
+host17_Jan_results<-host17_Jan_results[order(-host17_Jan_results$Airtime_no),]
+head(host17_Jan_results)
+p1<-ggplot(host17_Jan_results,aes(x=Airtime_no,y=Jan_orders))+geom_point(size=5)+geom_smooth(method="lm",se=TRUE)+xlab("Total air time by host Coffey Jennifer in January")+ylab("Total product sales in January")+ggtitle("Correlation between Host airtime and Product Sales in January")
+cor_host17_Jan<-cor(host17_Jan_results$Airtime_no,host17_Jan_results$Jan_orders)
+cor_host17_Jan
+
+host17_Feb_pd_tb<-as.data.frame(table(Product_airtime_Feb_host17$PRODUCT_DESCRIPTION))
+colnames(host17_Feb_pd_tb)<-c("Product","Airtime_no")
+host17_Feb_pd_tb<-host17_Feb_pd_tb[order(-host17_Feb_pd_tb$Airtime_no),]
+host17_Feb_pd_tb<-host17_Feb_pd_tb[host17_Feb_pd_tb$Airtime_no>0,]
+host17_Feb_results<-merge(host17_Feb_pd_tb,Feb_Order_Prod_desc,by="Product")
+host17_Feb_results<-host17_Feb_results[order(-host17_Feb_results$Airtime_no),]
+head(host17_Feb_results)
+p2<-ggplot(host17_Feb_results,aes(x=Airtime_no,y=Feb_orders))+geom_point(size=5,color="darkgreen")+geom_smooth(method="lm",se=TRUE,color="black")+xlab("Total air time by host Coffey Jennifer in February")+ylab("Total product sales in February")+ggtitle("Correlation between Host airtime and Product Sales in February")
+cor_host17_Feb<-cor(host17_Feb_results$Airtime_no,host17_Feb_results$Feb_orders)
+cor_host17_Feb
+
+host17_Mar_pd_tb<-as.data.frame(table(Product_airtime_Mar_host17$PRODUCT_DESCRIPTION))
+colnames(host17_Mar_pd_tb)<-c("Product","Airtime_no")
+host17_Mar_pd_tb<-host17_Mar_pd_tb[order(-host17_Mar_pd_tb$Airtime_no),]
+host17_Mar_pd_tb<-host17_Mar_pd_tb[host17_Mar_pd_tb$Airtime_no>0,]
+host17_Mar_results<-merge(host17_Mar_pd_tb,Mar_Order_Prod_desc,by="Product")
+host17_Mar_results<-host17_Mar_results[order(-host17_Mar_results$Airtime_no),]
+head(host17_Mar_results)
+p3<-ggplot(host17_Mar_results,aes(x=Airtime_no,y=Mar_orders))+geom_point(size=5,color="orange")+geom_smooth(method="lm",se=TRUE,color="black")+xlab("Total air time by host Coffey Jennifer in March")+ylab("Total product sales in March")+ggtitle("Correlation between Host airtime and Product Sales in March")
+cor_host17_Mar<-cor(host17_Mar_results$Airtime_no,host17_Mar_results$Mar_orders)
+cor_host17_Mar
+
+
+print(p1)
+print(p2)
+print(p3)
+```
+
+
+###18)Host 18- Irvin Albany
+
+```{r}
+Product_airtime_Jan_host18<-subset(product_airtime_Jan,product_airtime_Jan$HOST1=="Irvin Albany")
+Product_airtime_Feb_host18<-subset(product_airtime_Feb,product_airtime_Feb$HOST1=="Irvin Albany")
+Product_airtime_Mar_host18<-subset(product_airtime_March,product_airtime_March$HOST1=="Irvin Albany")
+
+
+host18_Jan_pd_tb<-as.data.frame(table(Product_airtime_Jan_host18$PRODUCT_DESCRIPTION))
+colnames(host18_Jan_pd_tb)<-c("Product","Airtime_no")
+host18_Jan_pd_tb<-host18_Jan_pd_tb[order(-host18_Jan_pd_tb$Airtime_no),]
+host18_Jan_pd_tb<-host18_Jan_pd_tb[host18_Jan_pd_tb$Airtime_no>0,]
+host18_Jan_results<-merge(host18_Jan_pd_tb,Jan_Order_Prod_desc,by="Product")
+host18_Jan_results<-host18_Jan_results[order(-host18_Jan_results$Airtime_no),]
+head(host18_Jan_results)
+p1<-ggplot(host18_Jan_results,aes(x=Airtime_no,y=Jan_orders))+geom_point(size=5)+geom_smooth(method="lm",se=TRUE)+xlab("Total air time by host Irvin Albany in January")+ylab("Total product sales in January")+ggtitle("Correlation between Host airtime and Product Sales in January")
+cor_host18_Jan<-cor(host18_Jan_results$Airtime_no,host18_Jan_results$Jan_orders)
+cor_host18_Jan
+
+host18_Feb_pd_tb<-as.data.frame(table(Product_airtime_Feb_host18$PRODUCT_DESCRIPTION))
+colnames(host18_Feb_pd_tb)<-c("Product","Airtime_no")
+host18_Feb_pd_tb<-host18_Feb_pd_tb[order(-host18_Feb_pd_tb$Airtime_no),]
+host18_Feb_pd_tb<-host18_Feb_pd_tb[host18_Feb_pd_tb$Airtime_no>0,]
+host18_Feb_results<-merge(host18_Feb_pd_tb,Feb_Order_Prod_desc,by="Product")
+host18_Feb_results<-host18_Feb_results[order(-host18_Feb_results$Airtime_no),]
+head(host18_Feb_results)
+p2<-ggplot(host18_Feb_results,aes(x=Airtime_no,y=Feb_orders))+geom_point(size=5,color="darkgreen")+geom_smooth(method="lm",se=TRUE,color="black")+xlab("Total air time by host Irvin Albany in February")+ylab("Total product sales in February")+ggtitle("Correlation between Host airtime and Product Sales in February")
+cor_host18_Feb<-cor(host18_Feb_results$Airtime_no,host18_Feb_results$Feb_orders)
+cor_host18_Feb
+
+host18_Mar_pd_tb<-as.data.frame(table(Product_airtime_Mar_host18$PRODUCT_DESCRIPTION))
+colnames(host18_Mar_pd_tb)<-c("Product","Airtime_no")
+host18_Mar_pd_tb<-host18_Mar_pd_tb[order(-host18_Mar_pd_tb$Airtime_no),]
+host18_Mar_pd_tb<-host18_Mar_pd_tb[host18_Mar_pd_tb$Airtime_no>0,]
+host18_Mar_results<-merge(host18_Mar_pd_tb,Mar_Order_Prod_desc,by="Product")
+host18_Mar_results<-host18_Mar_results[order(-host18_Mar_results$Airtime_no),]
+head(host18_Mar_results)
+p3<-ggplot(host18_Mar_results,aes(x=Airtime_no,y=Mar_orders))+geom_point(size=5,color="orange")+geom_smooth(method="lm",se=TRUE,color="black")+xlab("Total air time by host Irvin Albany in March")+ylab("Total product sales in March")+ggtitle("Correlation between Host airtime and Product Sales in March")
+cor_host18_Mar<-cor(host18_Mar_results$Airtime_no,host18_Mar_results$Mar_orders)
+cor_host18_Mar
+
+
+print(p1)
+print(p2)
+print(p3)
+```
+
+
+###19)Host 19- Bennett Sandra
+
+```{r}
+Product_airtime_Jan_host19<-subset(product_airtime_Jan,product_airtime_Jan$HOST1=="Bennett Sandra")
+Product_airtime_Feb_host19<-subset(product_airtime_Feb,product_airtime_Feb$HOST1=="Bennett Sandra")
+Product_airtime_Mar_host19<-subset(product_airtime_March,product_airtime_March$HOST1=="Bennett Sandra")
+
+
+host19_Jan_pd_tb<-as.data.frame(table(Product_airtime_Jan_host19$PRODUCT_DESCRIPTION))
+colnames(host19_Jan_pd_tb)<-c("Product","Airtime_no")
+host19_Jan_pd_tb<-host19_Jan_pd_tb[order(-host19_Jan_pd_tb$Airtime_no),]
+host19_Jan_pd_tb<-host19_Jan_pd_tb[host19_Jan_pd_tb$Airtime_no>0,]
+host19_Jan_results<-merge(host19_Jan_pd_tb,Jan_Order_Prod_desc,by="Product")
+host19_Jan_results<-host19_Jan_results[order(-host19_Jan_results$Airtime_no),]
+head(host19_Jan_results)
+p1<-ggplot(host19_Jan_results,aes(x=Airtime_no,y=Jan_orders))+geom_point(size=5)+geom_smooth(method="lm",se=TRUE)+xlab("Total air time by host Bennett Sandra in January")+ylab("Total product sales in January")+ggtitle("Correlation between Host airtime and Product Sales in January")
+cor_host19_Jan<-cor(host19_Jan_results$Airtime_no,host19_Jan_results$Jan_orders)
+cor_host19_Jan
+
+host19_Feb_pd_tb<-as.data.frame(table(Product_airtime_Feb_host19$PRODUCT_DESCRIPTION))
+colnames(host19_Feb_pd_tb)<-c("Product","Airtime_no")
+host19_Feb_pd_tb<-host19_Feb_pd_tb[order(-host19_Feb_pd_tb$Airtime_no),]
+host19_Feb_pd_tb<-host19_Feb_pd_tb[host19_Feb_pd_tb$Airtime_no>0,]
+host19_Feb_results<-merge(host19_Feb_pd_tb,Feb_Order_Prod_desc,by="Product")
+host19_Feb_results<-host19_Feb_results[order(-host19_Feb_results$Airtime_no),]
+head(host19_Feb_results)
+p2<-ggplot(host19_Feb_results,aes(x=Airtime_no,y=Feb_orders))+geom_point(size=5,color="darkgreen")+geom_smooth(method="lm",se=TRUE,color="black")+xlab("Total air time by host Bennett Sandra in February")+ylab("Total product sales in February")+ggtitle("Correlation between Host airtime and Product Sales in February")
+cor_host19_Feb<-cor(host19_Feb_results$Airtime_no,host19_Feb_results$Feb_orders)
+cor_host19_Feb
+
+host19_Mar_pd_tb<-as.data.frame(table(Product_airtime_Mar_host19$PRODUCT_DESCRIPTION))
+colnames(host19_Mar_pd_tb)<-c("Product","Airtime_no")
+host19_Mar_pd_tb<-host19_Mar_pd_tb[order(-host19_Mar_pd_tb$Airtime_no),]
+host19_Mar_pd_tb<-host19_Mar_pd_tb[host19_Mar_pd_tb$Airtime_no>0,]
+host19_Mar_results<-merge(host19_Mar_pd_tb,Mar_Order_Prod_desc,by="Product")
+host19_Mar_results<-host19_Mar_results[order(-host19_Mar_results$Airtime_no),]
+head(host19_Mar_results)
+p3<-ggplot(host19_Mar_results,aes(x=Airtime_no,y=Mar_orders))+geom_point(size=5,color="orange")+geom_smooth(method="lm",se=TRUE,color="black")+xlab("Total air time by host Bennett Sandra in March")+ylab("Total product sales in March")+ggtitle("Correlation between Host airtime and Product Sales in March")
+cor_host19_Mar<-cor(host19_Mar_results$Airtime_no,host19_Mar_results$Mar_orders)
+cor_host19_Mar
+
+
+print(p1)
+print(p2)
+print(p3)
+```
+
+###20)Host 20- Gracie Carolyn
+
+```{r}
+Product_airtime_Jan_host20<-subset(product_airtime_Jan,product_airtime_Jan$HOST1=="Gracie Carolyn")
+Product_airtime_Feb_host20<-subset(product_airtime_Feb,product_airtime_Feb$HOST1=="Gracie Carolyn")
+Product_airtime_Mar_host20<-subset(product_airtime_March,product_airtime_March$HOST1=="Gracie Carolyn")
+
+
+host20_Jan_pd_tb<-as.data.frame(table(Product_airtime_Jan_host20$PRODUCT_DESCRIPTION))
+colnames(host20_Jan_pd_tb)<-c("Product","Airtime_no")
+host20_Jan_pd_tb<-host20_Jan_pd_tb[order(-host20_Jan_pd_tb$Airtime_no),]
+host20_Jan_pd_tb<-host20_Jan_pd_tb[host20_Jan_pd_tb$Airtime_no>0,]
+host20_Jan_results<-merge(host20_Jan_pd_tb,Jan_Order_Prod_desc,by="Product")
+host20_Jan_results<-host20_Jan_results[order(-host20_Jan_results$Airtime_no),]
+head(host20_Jan_results)
+p1<-ggplot(host20_Jan_results,aes(x=Airtime_no,y=Jan_orders))+geom_point(size=5)+geom_smooth(method="lm",se=TRUE)+xlab("Total air time by host Gracie Carolyn in January")+ylab("Total product sales in January")+ggtitle("Correlation between Host airtime and Product Sales in January")
+cor_host20_Jan<-cor(host20_Jan_results$Airtime_no,host20_Jan_results$Jan_orders)
+cor_host20_Jan
+
+host20_Feb_pd_tb<-as.data.frame(table(Product_airtime_Feb_host20$PRODUCT_DESCRIPTION))
+colnames(host20_Feb_pd_tb)<-c("Product","Airtime_no")
+host20_Feb_pd_tb<-host20_Feb_pd_tb[order(-host20_Feb_pd_tb$Airtime_no),]
+host20_Feb_pd_tb<-host20_Feb_pd_tb[host20_Feb_pd_tb$Airtime_no>0,]
+host20_Feb_results<-merge(host20_Feb_pd_tb,Feb_Order_Prod_desc,by="Product")
+host20_Feb_results<-host20_Feb_results[order(-host20_Feb_results$Airtime_no),]
+head(host20_Feb_results)
+p2<-ggplot(host20_Feb_results,aes(x=Airtime_no,y=Feb_orders))+geom_point(size=5,color="darkgreen")+geom_smooth(method="lm",se=TRUE,color="black")+xlab("Total air time by host Gracie Carolyn in February")+ylab("Total product sales in February")+ggtitle("Correlation between Host airtime and Product Sales in February")
+cor_host20_Feb<-cor(host20_Feb_results$Airtime_no,host20_Feb_results$Feb_orders)
+cor_host20_Feb
+
+host20_Mar_pd_tb<-as.data.frame(table(Product_airtime_Mar_host20$PRODUCT_DESCRIPTION))
+colnames(host20_Mar_pd_tb)<-c("Product","Airtime_no")
+host20_Mar_pd_tb<-host20_Mar_pd_tb[order(-host20_Mar_pd_tb$Airtime_no),]
+host20_Mar_pd_tb<-host20_Mar_pd_tb[host20_Mar_pd_tb$Airtime_no>0,]
+host20_Mar_results<-merge(host20_Mar_pd_tb,Mar_Order_Prod_desc,by="Product")
+host20_Mar_results<-host20_Mar_results[order(-host20_Mar_results$Airtime_no),]
+head(host20_Mar_results)
+p3<-ggplot(host20_Mar_results,aes(x=Airtime_no,y=Mar_orders))+geom_point(size=5,color="orange")+geom_smooth(method="lm",se=TRUE,color="black")+xlab("Total air time by host Gracie Carolyn in March")+ylab("Total product sales in March")+ggtitle("Correlation between Host airtime and Product Sales in March")
+cor_host20_Mar<-cor(host20_Mar_results$Airtime_no,host20_Mar_results$Mar_orders)
+cor_host20_Mar
+
+
+print(p1)
+print(p2)
+print(p3)
+```
+
+###21)Host 21- Boesing Rachel
+
+```{r}
+Product_airtime_Jan_host21<-subset(product_airtime_Jan,product_airtime_Jan$HOST1=="Boesing Rachel")
+Product_airtime_Feb_host21<-subset(product_airtime_Feb,product_airtime_Feb$HOST1=="Boesing Rachel")
+Product_airtime_Mar_host21<-subset(product_airtime_March,product_airtime_March$HOST1=="Boesing Rachel")
+
+
+host21_Jan_pd_tb<-as.data.frame(table(Product_airtime_Jan_host21$PRODUCT_DESCRIPTION))
+colnames(host21_Jan_pd_tb)<-c("Product","Airtime_no")
+host21_Jan_pd_tb<-host21_Jan_pd_tb[order(-host21_Jan_pd_tb$Airtime_no),]
+host21_Jan_pd_tb<-host21_Jan_pd_tb[host21_Jan_pd_tb$Airtime_no>0,]
+host21_Jan_results<-merge(host21_Jan_pd_tb,Jan_Order_Prod_desc,by="Product")
+host21_Jan_results<-host21_Jan_results[order(-host21_Jan_results$Airtime_no),]
+head(host21_Jan_results)
+p1<-ggplot(host21_Jan_results,aes(x=Airtime_no,y=Jan_orders))+geom_point(size=5)+geom_smooth(method="lm",se=TRUE)+xlab("Total air time by host Boesing Rachel in January")+ylab("Total product sales in January")+ggtitle("Correlation between Host airtime and Product Sales in January")
+cor_host21_Jan<-cor(host21_Jan_results$Airtime_no,host21_Jan_results$Jan_orders)
+cor_host21_Jan
+
+host21_Feb_pd_tb<-as.data.frame(table(Product_airtime_Feb_host21$PRODUCT_DESCRIPTION))
+colnames(host21_Feb_pd_tb)<-c("Product","Airtime_no")
+host21_Feb_pd_tb<-host21_Feb_pd_tb[order(-host21_Feb_pd_tb$Airtime_no),]
+host21_Feb_pd_tb<-host21_Feb_pd_tb[host21_Feb_pd_tb$Airtime_no>0,]
+host21_Feb_results<-merge(host21_Feb_pd_tb,Feb_Order_Prod_desc,by="Product")
+host21_Feb_results<-host21_Feb_results[order(-host21_Feb_results$Airtime_no),]
+head(host21_Feb_results)
+p2<-ggplot(host21_Feb_results,aes(x=Airtime_no,y=Feb_orders))+geom_point(size=5,color="darkgreen")+geom_smooth(method="lm",se=TRUE,color="black")+xlab("Total air time by host Boesing Rachel in February")+ylab("Total product sales in February")+ggtitle("Correlation between Host airtime and Product Sales in February")
+cor_host21_Feb<-cor(host21_Feb_results$Airtime_no,host21_Feb_results$Feb_orders)
+cor_host21_Feb
+
+host21_Mar_pd_tb<-as.data.frame(table(Product_airtime_Mar_host21$PRODUCT_DESCRIPTION))
+colnames(host21_Mar_pd_tb)<-c("Product","Airtime_no")
+host21_Mar_pd_tb<-host21_Mar_pd_tb[order(-host21_Mar_pd_tb$Airtime_no),]
+host21_Mar_pd_tb<-host21_Mar_pd_tb[host21_Mar_pd_tb$Airtime_no>0,]
+host21_Mar_results<-merge(host21_Mar_pd_tb,Mar_Order_Prod_desc,by="Product")
+host21_Mar_results<-host21_Mar_results[order(-host21_Mar_results$Airtime_no),]
+head(host21_Mar_results)
+p3<-ggplot(host21_Mar_results,aes(x=Airtime_no,y=Mar_orders))+geom_point(size=5,color="orange")+geom_smooth(method="lm",se=TRUE,color="black")+xlab("Total air time by host Boesing Rachel in March")+ylab("Total product sales in March")+ggtitle("Correlation between Host airtime and Product Sales in March")
+cor_host21_Mar<-cor(host21_Mar_results$Airtime_no,host21_Mar_results$Mar_orders)
+cor_host21_Mar
+
+
+print(p1)
+print(p2)
+print(p3)
+```
+
+
+###22)Host 22- Venable David
+
+```{r}
+Product_airtime_Jan_host22<-subset(product_airtime_Jan,product_airtime_Jan$HOST1=="Venable David")
+Product_airtime_Feb_host22<-subset(product_airtime_Feb,product_airtime_Feb$HOST1=="Venable David")
+Product_airtime_Mar_host22<-subset(product_airtime_March,product_airtime_March$HOST1=="Venable David")
+
+
+host22_Jan_pd_tb<-as.data.frame(table(Product_airtime_Jan_host22$PRODUCT_DESCRIPTION))
+colnames(host22_Jan_pd_tb)<-c("Product","Airtime_no")
+host22_Jan_pd_tb<-host22_Jan_pd_tb[order(-host22_Jan_pd_tb$Airtime_no),]
+host22_Jan_pd_tb<-host22_Jan_pd_tb[host22_Jan_pd_tb$Airtime_no>0,]
+host22_Jan_results<-merge(host22_Jan_pd_tb,Jan_Order_Prod_desc,by="Product")
+host22_Jan_results<-host22_Jan_results[order(-host22_Jan_results$Airtime_no),]
+head(host22_Jan_results)
+p1<-ggplot(host22_Jan_results,aes(x=Airtime_no,y=Jan_orders))+geom_point(size=5)+geom_smooth(method="lm",se=TRUE)+xlab("Total air time by host Venable David in January")+ylab("Total product sales in January")+ggtitle("Correlation between Host airtime and Product Sales in January")
+cor_host22_Jan<-cor(host22_Jan_results$Airtime_no,host22_Jan_results$Jan_orders)
+cor_host22_Jan
+
+host22_Feb_pd_tb<-as.data.frame(table(Product_airtime_Feb_host22$PRODUCT_DESCRIPTION))
+colnames(host22_Feb_pd_tb)<-c("Product","Airtime_no")
+host22_Feb_pd_tb<-host22_Feb_pd_tb[order(-host22_Feb_pd_tb$Airtime_no),]
+host22_Feb_pd_tb<-host22_Feb_pd_tb[host22_Feb_pd_tb$Airtime_no>0,]
+host22_Feb_results<-merge(host22_Feb_pd_tb,Feb_Order_Prod_desc,by="Product")
+host22_Feb_results<-host22_Feb_results[order(-host22_Feb_results$Airtime_no),]
+head(host22_Feb_results)
+p2<-ggplot(host22_Feb_results,aes(x=Airtime_no,y=Feb_orders))+geom_point(size=5,color="darkgreen")+geom_smooth(method="lm",se=TRUE,color="black")+xlab("Total air time by host Venable David in February")+ylab("Total product sales in February")+ggtitle("Correlation between Host airtime and Product Sales in February")
+cor_host22_Feb<-cor(host22_Feb_results$Airtime_no,host22_Feb_results$Feb_orders)
+cor_host22_Feb
+
+host22_Mar_pd_tb<-as.data.frame(table(Product_airtime_Mar_host22$PRODUCT_DESCRIPTION))
+colnames(host22_Mar_pd_tb)<-c("Product","Airtime_no")
+host22_Mar_pd_tb<-host22_Mar_pd_tb[order(-host22_Mar_pd_tb$Airtime_no),]
+host22_Mar_pd_tb<-host22_Mar_pd_tb[host22_Mar_pd_tb$Airtime_no>0,]
+host22_Mar_results<-merge(host22_Mar_pd_tb,Mar_Order_Prod_desc,by="Product")
+host22_Mar_results<-host22_Mar_results[order(-host22_Mar_results$Airtime_no),]
+head(host22_Mar_results)
+p3<-ggplot(host22_Mar_results,aes(x=Airtime_no,y=Mar_orders))+geom_point(size=5,color="orange")+geom_smooth(method="lm",se=TRUE,color="black")+xlab("Total air time by host Venable David in March")+ylab("Total product sales in March")+ggtitle("Correlation between Host airtime and Product Sales in March")
+cor_host22_Mar<-cor(host22_Mar_results$Airtime_no,host22_Mar_results$Mar_orders)
+cor_host22_Mar
+
+
+print(p1)
+print(p2)
+print(p3)
+```
+
+###23)Host 23- Abiera Gabrielle
+
+```{r}
+Product_airtime_Jan_host23<-subset(product_airtime_Jan,product_airtime_Jan$HOST1=="Abiera Gabrielle")
+Product_airtime_Feb_host23<-subset(product_airtime_Feb,product_airtime_Feb$HOST1=="Abiera Gabrielle")
+Product_airtime_Mar_host23<-subset(product_airtime_March,product_airtime_March$HOST1=="Abiera Gabrielle")
+
+
+host23_Jan_pd_tb<-as.data.frame(table(Product_airtime_Jan_host23$PRODUCT_DESCRIPTION))
+colnames(host23_Jan_pd_tb)<-c("Product","Airtime_no")
+host23_Jan_pd_tb<-host23_Jan_pd_tb[order(-host23_Jan_pd_tb$Airtime_no),]
+host23_Jan_pd_tb<-host23_Jan_pd_tb[host23_Jan_pd_tb$Airtime_no>0,]
+host23_Jan_results<-merge(host23_Jan_pd_tb,Jan_Order_Prod_desc,by="Product")
+host23_Jan_results<-host23_Jan_results[order(-host23_Jan_results$Airtime_no),]
+head(host23_Jan_results)
+p1<-ggplot(host23_Jan_results,aes(x=Airtime_no,y=Jan_orders))+geom_point(size=5)+geom_smooth(method="lm",se=TRUE)+xlab("Total air time by host Abiera Gabrielle in January")+ylab("Total product sales in January")+ggtitle("Correlation between Host airtime and Product Sales in January")
+cor_host23_Jan<-cor(host23_Jan_results$Airtime_no,host23_Jan_results$Jan_orders)
+cor_host23_Jan
+
+host23_Feb_pd_tb<-as.data.frame(table(Product_airtime_Feb_host23$PRODUCT_DESCRIPTION))
+colnames(host23_Feb_pd_tb)<-c("Product","Airtime_no")
+host23_Feb_pd_tb<-host23_Feb_pd_tb[order(-host23_Feb_pd_tb$Airtime_no),]
+host23_Feb_pd_tb<-host23_Feb_pd_tb[host23_Feb_pd_tb$Airtime_no>0,]
+host23_Feb_results<-merge(host23_Feb_pd_tb,Feb_Order_Prod_desc,by="Product")
+host23_Feb_results<-host23_Feb_results[order(-host23_Feb_results$Airtime_no),]
+head(host23_Feb_results)
+p2<-ggplot(host23_Feb_results,aes(x=Airtime_no,y=Feb_orders))+geom_point(size=5,color="darkgreen")+geom_smooth(method="lm",se=TRUE,color="black")+xlab("Total air time by host Abiera Gabrielle in February")+ylab("Total product sales in February")+ggtitle("Correlation between Host airtime and Product Sales in February")
+cor_host23_Feb<-cor(host23_Feb_results$Airtime_no,host23_Feb_results$Feb_orders)
+cor_host23_Feb
+
+host23_Mar_pd_tb<-as.data.frame(table(Product_airtime_Mar_host23$PRODUCT_DESCRIPTION))
+colnames(host23_Mar_pd_tb)<-c("Product","Airtime_no")
+host23_Mar_pd_tb<-host23_Mar_pd_tb[order(-host23_Mar_pd_tb$Airtime_no),]
+host23_Mar_pd_tb<-host23_Mar_pd_tb[host23_Mar_pd_tb$Airtime_no>0,]
+host23_Mar_results<-merge(host23_Mar_pd_tb,Mar_Order_Prod_desc,by="Product")
+host23_Mar_results<-host23_Mar_results[order(-host23_Mar_results$Airtime_no),]
+head(host23_Mar_results)
+p3<-ggplot(host23_Mar_results,aes(x=Airtime_no,y=Mar_orders))+geom_point(size=5,color="orange")+geom_smooth(method="lm",se=TRUE,color="black")+xlab("Total air time by host Abiera Gabrielle in March")+ylab("Total product sales in March")+ggtitle("Correlation between Host airtime and Product Sales in March")
+cor_host23_Mar<-cor(host23_Mar_results$Airtime_no,host23_Mar_results$Mar_orders)
+cor_host23_Mar
+
+
+print(p1)
+print(p2)
+print(p3)
+```
+
+###24)Host 24- Faetsch Sharon
+
+```{r}
+Product_airtime_Jan_host24<-subset(product_airtime_Jan,product_airtime_Jan$HOST1=="Faetsch Sharon")
+Product_airtime_Feb_host24<-subset(product_airtime_Feb,product_airtime_Feb$HOST1=="Faetsch Sharon")
+Product_airtime_Mar_host24<-subset(product_airtime_March,product_airtime_March$HOST1=="Faetsch Sharon")
+
+
+host24_Jan_pd_tb<-as.data.frame(table(Product_airtime_Jan_host24$PRODUCT_DESCRIPTION))
+colnames(host24_Jan_pd_tb)<-c("Product","Airtime_no")
+host24_Jan_pd_tb<-host24_Jan_pd_tb[order(-host24_Jan_pd_tb$Airtime_no),]
+host24_Jan_pd_tb<-host24_Jan_pd_tb[host24_Jan_pd_tb$Airtime_no>0,]
+host24_Jan_results<-merge(host24_Jan_pd_tb,Jan_Order_Prod_desc,by="Product")
+host24_Jan_results<-host24_Jan_results[order(-host24_Jan_results$Airtime_no),]
+head(host24_Jan_results)
+p1<-ggplot(host24_Jan_results,aes(x=Airtime_no,y=Jan_orders))+geom_point(size=5)+geom_smooth(method="lm",se=TRUE)+xlab("Total air time by host Faetsch Sharon in January")+ylab("Total product sales in January")+ggtitle("Correlation between Host airtime and Product Sales in January")
+cor_host24_Jan<-cor(host24_Jan_results$Airtime_no,host24_Jan_results$Jan_orders)
+cor_host24_Jan
+
+host24_Feb_pd_tb<-as.data.frame(table(Product_airtime_Feb_host24$PRODUCT_DESCRIPTION))
+colnames(host24_Feb_pd_tb)<-c("Product","Airtime_no")
+host24_Feb_pd_tb<-host24_Feb_pd_tb[order(-host24_Feb_pd_tb$Airtime_no),]
+host24_Feb_pd_tb<-host24_Feb_pd_tb[host24_Feb_pd_tb$Airtime_no>0,]
+host24_Feb_results<-merge(host24_Feb_pd_tb,Feb_Order_Prod_desc,by="Product")
+host24_Feb_results<-host24_Feb_results[order(-host24_Feb_results$Airtime_no),]
+head(host24_Feb_results)
+p2<-ggplot(host24_Feb_results,aes(x=Airtime_no,y=Feb_orders))+geom_point(size=5,color="darkgreen")+geom_smooth(method="lm",se=TRUE,color="black")+xlab("Total air time by host Faetsch Sharon in February")+ylab("Total product sales in February")+ggtitle("Correlation between Host airtime and Product Sales in February")
+cor_host24_Feb<-cor(host24_Feb_results$Airtime_no,host24_Feb_results$Feb_orders)
+cor_host24_Feb
+
+host24_Mar_pd_tb<-as.data.frame(table(Product_airtime_Mar_host24$PRODUCT_DESCRIPTION))
+colnames(host24_Mar_pd_tb)<-c("Product","Airtime_no")
+host24_Mar_pd_tb<-host24_Mar_pd_tb[order(-host24_Mar_pd_tb$Airtime_no),]
+host24_Mar_pd_tb<-host24_Mar_pd_tb[host24_Mar_pd_tb$Airtime_no>0,]
+host24_Mar_results<-merge(host24_Mar_pd_tb,Mar_Order_Prod_desc,by="Product")
+host24_Mar_results<-host24_Mar_results[order(-host24_Mar_results$Airtime_no),]
+head(host24_Mar_results)
+p3<-ggplot(host24_Mar_results,aes(x=Airtime_no,y=Mar_orders))+geom_point(size=5,color="orange")+geom_smooth(method="lm",se=TRUE,color="black")+xlab("Total air time by host Faetsch Sharon in March")+ylab("Total product sales in March")+ggtitle("Correlation between Host airtime and Product Sales in March")
+cor_host24_Mar<-cor(host24_Mar_results$Airtime_no,host24_Mar_results$Mar_orders)
+cor_host24_Mar
+
+
+print(p1)
+print(p2)
+print(p3)
+```
+
+
+###25)Host 25- Cason Courtney
+
+```{r}
+Product_airtime_Jan_host25<-subset(product_airtime_Jan,product_airtime_Jan$HOST1=="Cason Courtney")
+Product_airtime_Feb_host25<-subset(product_airtime_Feb,product_airtime_Feb$HOST1=="Cason Courtney")
+Product_airtime_Mar_host25<-subset(product_airtime_March,product_airtime_March$HOST1=="Cason Courtney")
+
+
+host25_Jan_pd_tb<-as.data.frame(table(Product_airtime_Jan_host25$PRODUCT_DESCRIPTION))
+colnames(host25_Jan_pd_tb)<-c("Product","Airtime_no")
+host25_Jan_pd_tb<-host25_Jan_pd_tb[order(-host25_Jan_pd_tb$Airtime_no),]
+host25_Jan_pd_tb<-host25_Jan_pd_tb[host25_Jan_pd_tb$Airtime_no>0,]
+host25_Jan_results<-merge(host25_Jan_pd_tb,Jan_Order_Prod_desc,by="Product")
+host25_Jan_results<-host25_Jan_results[order(-host25_Jan_results$Airtime_no),]
+head(host25_Jan_results)
+p1<-ggplot(host25_Jan_results,aes(x=Airtime_no,y=Jan_orders))+geom_point(size=5)+geom_smooth(method="lm",se=TRUE)+xlab("Total air time by host Cason Courtney in January")+ylab("Total product sales in January")+ggtitle("Correlation between Host airtime and Product Sales in January")
+cor_host25_Jan<-cor(host25_Jan_results$Airtime_no,host25_Jan_results$Jan_orders)
+cor_host25_Jan
+
+host25_Feb_pd_tb<-as.data.frame(table(Product_airtime_Feb_host25$PRODUCT_DESCRIPTION))
+colnames(host25_Feb_pd_tb)<-c("Product","Airtime_no")
+host25_Feb_pd_tb<-host25_Feb_pd_tb[order(-host25_Feb_pd_tb$Airtime_no),]
+host25_Feb_pd_tb<-host25_Feb_pd_tb[host25_Feb_pd_tb$Airtime_no>0,]
+host25_Feb_results<-merge(host25_Feb_pd_tb,Feb_Order_Prod_desc,by="Product")
+host25_Feb_results<-host25_Feb_results[order(-host25_Feb_results$Airtime_no),]
+head(host25_Feb_results)
+p2<-ggplot(host25_Feb_results,aes(x=Airtime_no,y=Feb_orders))+geom_point(size=5,color="darkgreen")+geom_smooth(method="lm",se=TRUE,color="black")+xlab("Total air time by host Cason Courtney in February")+ylab("Total product sales in February")+ggtitle("Correlation between Host airtime and Product Sales in February")
+cor_host25_Feb<-cor(host25_Feb_results$Airtime_no,host25_Feb_results$Feb_orders)
+cor_host25_Feb
+
+host25_Mar_pd_tb<-as.data.frame(table(Product_airtime_Mar_host25$PRODUCT_DESCRIPTION))
+colnames(host25_Mar_pd_tb)<-c("Product","Airtime_no")
+host25_Mar_pd_tb<-host25_Mar_pd_tb[order(-host25_Mar_pd_tb$Airtime_no),]
+host25_Mar_pd_tb<-host25_Mar_pd_tb[host25_Mar_pd_tb$Airtime_no>0,]
+host25_Mar_results<-merge(host25_Mar_pd_tb,Mar_Order_Prod_desc,by="Product")
+host25_Mar_results<-host25_Mar_results[order(-host25_Mar_results$Airtime_no),]
+head(host25_Mar_results)
+p3<-ggplot(host25_Mar_results,aes(x=Airtime_no,y=Mar_orders))+geom_point(size=5,color="orange")+geom_smooth(method="lm",se=TRUE,color="black")+xlab("Total air time by host Cason Courtney in March")+ylab("Total product sales in March")+ggtitle("Correlation between Host airtime and Product Sales in March")
+cor_host25_Mar<-cor(host25_Mar_results$Airtime_no,host25_Mar_results$Mar_orders)
+cor_host25_Mar
+
+
+print(p1)
+print(p2)
+print(p3)
+```
+
+###26)Host 26- Wheeler Dan
+
+```{r}
+Product_airtime_Jan_host26<-subset(product_airtime_Jan,product_airtime_Jan$HOST1=="Wheeler Dan")
+Product_airtime_Feb_host26<-subset(product_airtime_Feb,product_airtime_Feb$HOST1=="Wheeler Dan")
+Product_airtime_Mar_host26<-subset(product_airtime_March,product_airtime_March$HOST1=="Wheeler Dan")
+
+
+host26_Jan_pd_tb<-as.data.frame(table(Product_airtime_Jan_host26$PRODUCT_DESCRIPTION))
+colnames(host26_Jan_pd_tb)<-c("Product","Airtime_no")
+host26_Jan_pd_tb<-host26_Jan_pd_tb[order(-host26_Jan_pd_tb$Airtime_no),]
+host26_Jan_pd_tb<-host26_Jan_pd_tb[host26_Jan_pd_tb$Airtime_no>0,]
+host26_Jan_results<-merge(host26_Jan_pd_tb,Jan_Order_Prod_desc,by="Product")
+host26_Jan_results<-host26_Jan_results[order(-host26_Jan_results$Airtime_no),]
+head(host26_Jan_results)
+p1<-ggplot(host26_Jan_results,aes(x=Airtime_no,y=Jan_orders))+geom_point(size=5)+geom_smooth(method="lm",se=TRUE)+xlab("Total air time by host Wheeler Dan in January")+ylab("Total product sales in January")+ggtitle("Correlation between Host airtime and Product Sales in January")
+cor_host26_Jan<-cor(host26_Jan_results$Airtime_no,host26_Jan_results$Jan_orders)
+cor_host26_Jan
+
+host26_Feb_pd_tb<-as.data.frame(table(Product_airtime_Feb_host26$PRODUCT_DESCRIPTION))
+colnames(host26_Feb_pd_tb)<-c("Product","Airtime_no")
+host26_Feb_pd_tb<-host26_Feb_pd_tb[order(-host26_Feb_pd_tb$Airtime_no),]
+host26_Feb_pd_tb<-host26_Feb_pd_tb[host26_Feb_pd_tb$Airtime_no>0,]
+host26_Feb_results<-merge(host26_Feb_pd_tb,Feb_Order_Prod_desc,by="Product")
+host26_Feb_results<-host26_Feb_results[order(-host26_Feb_results$Airtime_no),]
+head(host26_Feb_results)
+p2<-ggplot(host26_Feb_results,aes(x=Airtime_no,y=Feb_orders))+geom_point(size=5,color="darkgreen")+geom_smooth(method="lm",se=TRUE,color="black")+xlab("Total air time by host Wheeler Dan in February")+ylab("Total product sales in February")+ggtitle("Correlation between Host airtime and Product Sales in February")
+cor_host26_Feb<-cor(host26_Feb_results$Airtime_no,host26_Feb_results$Feb_orders)
+cor_host26_Feb
+
+host26_Mar_pd_tb<-as.data.frame(table(Product_airtime_Mar_host26$PRODUCT_DESCRIPTION))
+colnames(host26_Mar_pd_tb)<-c("Product","Airtime_no")
+host26_Mar_pd_tb<-host26_Mar_pd_tb[order(-host26_Mar_pd_tb$Airtime_no),]
+host26_Mar_pd_tb<-host26_Mar_pd_tb[host26_Mar_pd_tb$Airtime_no>0,]
+host26_Mar_results<-merge(host26_Mar_pd_tb,Mar_Order_Prod_desc,by="Product")
+host26_Mar_results<-host26_Mar_results[order(-host26_Mar_results$Airtime_no),]
+head(host26_Mar_results)
+p3<-ggplot(host26_Mar_results,aes(x=Airtime_no,y=Mar_orders))+geom_point(size=5,color="orange")+geom_smooth(method="lm",se=TRUE,color="black")+xlab("Total air time by host Wheeler Dan in March")+ylab("Total product sales in March")+ggtitle("Correlation between Host airtime and Product Sales in March")
+cor_host26_Mar<-cor(host26_Mar_results$Airtime_no,host26_Mar_results$Mar_orders)
+cor_host26_Mar
+
+
+print(p1)
+print(p2)
+print(p3)
+```

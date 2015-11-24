@@ -1,0 +1,175 @@
+---
+title: "Temple Analytics Challenge-QVC"
+author: "Suraj V Vidyadaran - Temple University -AccesNet ID:tuf69034"
+output: html_document
+---
+
+#Q4)What is the impact of QVC's social networking presence on driving product sales?
+
+###Create a table of frequuency of sentiments
+```{r,echo=FALSE}
+social_sentiments<-as.data.frame(table(social$SENTIMENT))
+colnames(social_sentiments)<-c("Polarity","total_freq")
+social_sentiments<-social_sentiments[order(-social_sentiments$total_freq),]
+social_sentiments
+```
+
+###Visualize the results
+```{r,echo=FALSE}
+library(ggplot2)
+ggplot(social_sentiments,aes(x=reorder(Polarity,total_freq),y=total_freq,fill=Polarity))+geom_bar(stat = "identity")+coord_flip()+xlab("Polarity of Sentiments about QVC in Social Media")+ylab("Total Frequency of the sentiments")+ggtitle("Sentiment Analysis of Social media reviews of QVC")
+```
+
+###Subset the data based on Sentiments
+```{r,echo=FALSE}
+social_sentiments_positive<-subset(social,social$SENTIMENT=="Positive" )
+strong_pos<-subset(social,social$SENTIMENT=="Strongly positive")
+social_sentiments_positive<-rbind(social_sentiments_positive,strong_pos)
+head(social_sentiments_positive)
+social_sentiments_negative<-subset(social,social$SENTIMENT=="Negative")
+strong_neg<-subset(social,social$SENTIMENT=="Strongly negative")
+social_sentiments_negative<-rbind(social_sentiments_negative,strong_neg)
+head(social_sentiments_negative)
+```
+
+
+### Do a text mining on the reviews 
+
+####For Positive Reviews
+```{r,warning=FALSE,message=FALSE,echo=FALSE}
+
+#Positive reviews mining
+
+library(tm)
+library(SnowballC)
+
+review_text_positive<-paste(social_sentiments_positive$POST,collapse = " ")
+review_source_positive<-VectorSource(review_text_positive)
+corpus_positive<-Corpus(review_source_positive)
+corpus_positive<-tm_map(corpus_positive,content_transformer(tolower))
+corpus_positive<-tm_map(corpus_positive,removePunctuation)
+corpus_positive<-tm_map(corpus_positive,stripWhitespace)
+corpus_positive<-tm_map(corpus_positive,removeWords,stopwords("english"))
+corpus_positive<-tm_map(corpus_positive,removeWords,c("qvc","just","get","will","can","also"))
+dtm_positive<-DocumentTermMatrix(corpus_positive)
+dtm_positive2<-as.matrix(dtm_positive)
+frequency_positive<-colSums(dtm_positive2)
+frequency_positive<-sort(frequency_positive,decreasing = TRUE)
+head(frequency_positive)
+
+wf_positive<-data.frame(word=names(frequency_positive),freq=frequency_positive)
+head(wf_positive)
+
+library(ggplot2)
+ggplot(subset(wf_positive,freq>750),aes(word,freq))+geom_bar(stat="identity")+coord_flip()
+
+library(wordcloud)
+set.seed(112)
+ wordcloud(names(frequency_positive),frequency_positive,min.freq = 50,colors=brewer.pal(6,"Dark2"),scale = c(5,.1),rot.per = 0.1)
+```
+
+
+####For Negative reviews
+
+
+```{r,warning=FALSE,message=FALSE,echo=FALSE}
+
+#Negative reviews mining
+
+library(tm)
+library(SnowballC)
+
+review_text_negative<-paste(social_sentiments_negative$POST,collapse = " ")
+review_source_negative<-VectorSource(review_text_negative)
+corpus_negative<-Corpus(review_source_negative)
+corpus_negative<-tm_map(corpus_negative,content_transformer(tolower))
+corpus_negative<-tm_map(corpus_negative,removePunctuation)
+corpus_negative<-tm_map(corpus_negative,stripWhitespace)
+corpus_negative<-tm_map(corpus_negative,removeWords,stopwords("english"))
+corpus_negative<-tm_map(corpus_negative,removeWords,c("qvc","just","get","will","can","also","like","one",""))
+dtm_negative<-DocumentTermMatrix(corpus_negative)
+dtm_negative2<-as.matrix(dtm_negative)
+frequency_negative<-colSums(dtm_negative2)
+frequency_negative<-sort(frequency_negative,decreasing = TRUE)
+head(frequency_negative)
+
+wf_negative<-data.frame(word=names(frequency_negative),freq=frequency_negative)
+head(wf_negative)
+
+library(ggplot2)
+ggplot(subset(wf_negative,freq>500),aes(word,freq))+geom_bar(stat="identity")+coord_flip()
+
+library(wordcloud)
+set.seed(112)
+ wordcloud(names(frequency_negative),frequency_negative,min.freq = 50,colors=brewer.pal(6,"Dark2"),scale = c(5,.1),rot.per = 0.1)
+```
+
+####For Strong Positive Reviews
+```{r,warning=FALSE,message=FALSE,echo=FALSE}
+
+#Strong Positive reviews mining
+
+library(tm)
+library(SnowballC)
+
+review_text_strong_positive<-paste(strong_pos$POST,collapse = " ")
+review_source_strong_positive<-VectorSource(review_text_strong_positive)
+corpus_strong_positive<-Corpus(review_source_strong_positive)
+corpus_strong_positive<-tm_map(corpus_strong_positive,content_transformer(tolower))
+corpus_strong_positive<-tm_map(corpus_strong_positive,removePunctuation)
+corpus_strong_positive<-tm_map(corpus_strong_positive,stripWhitespace)
+corpus_strong_positive<-tm_map(corpus_strong_positive,removeWords,stopwords("english"))
+corpus_strong_positive<-tm_map(corpus_strong_positive,removeWords,c("qvc","just","get","will","can","also"))
+dtm_strong_positive<-DocumentTermMatrix(corpus_strong_positive)
+dtm_strong_positive2<-as.matrix(dtm_strong_positive)
+frequency_strong_positive<-colSums(dtm_strong_positive2)
+frequency_strong_positive<-sort(frequency_strong_positive,decreasing = TRUE)
+head(frequency_strong_positive)
+
+wf_strong_positive<-data.frame(word=names(frequency_strong_positive),freq=frequency_strong_positive)
+head(wf_strong_positive)
+
+library(ggplot2)
+ggplot(subset(wf_strong_positive,freq>250),aes(word,freq))+geom_bar(stat="identity")+coord_flip()
+
+library(wordcloud)
+set.seed(112)
+ wordcloud(names(frequency_strong_positive),frequency_strong_positive,min.freq = 50,colors=brewer.pal(6,"Dark2"),scale = c(5,.1),rot.per = 0.1)
+```
+
+
+
+####For Strong Negative reviews
+
+
+```{r,warning=FALSE,message=FALSE,echo=FALSE}
+
+# Strong Negative reviews mining
+
+library(tm)
+library(SnowballC)
+
+review_text_strong_negative<-paste(strong_neg$POST,collapse = " ")
+review_source_strong_negative<-VectorSource(review_text_strong_negative)
+corpus_strong_negative<-Corpus(review_source_strong_negative)
+corpus_strong_negative<-tm_map(corpus_strong_negative,content_transformer(tolower))
+corpus_strong_negative<-tm_map(corpus_strong_negative,removePunctuation)
+corpus_strong_negative<-tm_map(corpus_strong_negative,stripWhitespace)
+corpus_strong_negative<-tm_map(corpus_strong_negative,removeWords,stopwords("english"))
+corpus_strong_negative<-tm_map(corpus_strong_negative,removeWords,c("qvc","just","get","will","can","also","like","one",""))
+dtm_strong_negative<-DocumentTermMatrix(corpus_strong_negative)
+dtm_strong_negative2<-as.matrix(dtm_strong_negative)
+frequency_strong_negative<-colSums(dtm_strong_negative2)
+frequency_strong_negative<-sort(frequency_strong_negative,decreasing = TRUE)
+head(frequency_strong_negative)
+
+wf_strong_negative<-data.frame(word=names(frequency_strong_negative),freq=frequency_strong_negative)
+head(wf_strong_negative)
+
+library(ggplot2)
+ggplot(subset(wf_strong_negative,freq>250),aes(word,freq))+geom_bar(stat="identity")+coord_flip()
+
+library(wordcloud)
+set.seed(112)
+ wordcloud(names(frequency_strong_negative),frequency_strong_negative,min.freq = 50,colors=brewer.pal(6,"Dark2"),scale = c(5,.1),rot.per = 0.1)
+```
