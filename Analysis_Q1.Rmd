@@ -1,0 +1,102 @@
+---
+title: "Analysis_Q1"
+author: "Suraj Vidyadaran"
+date: "Monday, October 26, 2015"
+output: html_document
+---
+
+#Q1)What are the products or product categories which sells best in the US market?
+
+```{r,eval=FALSE}
+#Merging the  order and product master datset using product numbers
+
+order_January<-merge(product_master,order_January,by="PRODUCT_NBR")
+head(order_January)
+order_January<-order_January[order(order_January$ORDER_DATE),]
+head(order_January)
+order_February<-merge(product_master,order_February,by="PRODUCT_NBR")
+order_February<-order_February[order(order_February$ORDER_DATE),]
+head(order_February)
+order_March<-merge(product_master,order_March,by="PRODUCT_NBR")
+order_March<-order_March[order(order_March$ORDER_DATE),]
+head(order_March)
+```
+
+```{r}
+#Creating a table based on category to see the sales based on category
+
+Jan_order_table<-as.data.frame(table(order_January$PRODUCT_CATEGORY))
+colnames(Jan_order_table)<-c("Category","Jan_orders")
+Feb_order_table<-as.data.frame(table(order_February$PRODUCT_CATEGORY))
+colnames(Feb_order_table)<-c("Category","Feb_orders")
+Mar_order_table<-as.data.frame(table(order_March$PRODUCT_CATEGORY))
+colnames(Mar_order_table)<-c("Category","Mar_orders")
+Feb_order_table
+Mar_order_table
+```
+
+
+```{r}
+
+#Comparing the sales and generate the report of maximum sales per product category
+Compare_orders<-merge(Jan_order_table,Feb_order_table,by="Category")
+Compare_orders<-merge(Compare_orders,Mar_order_table,by="Category")
+Compare_orders
+```
+
+```{r}
+#Calculate the top 10 Category of products sold in 3 months
+Jan_order_table<-Jan_order_table[order(-Jan_order_table$Jan_orders),]
+Jan_Top_10_Sales_Category<-Jan_order_table[1:10,]
+Jan_Top_10_Sales_Category
+Feb_order_table<-Feb_order_table[order(-Feb_order_table$Feb_orders),]
+Feb_Top_10_Sales_Category<-Feb_order_table[1:10,]
+Feb_Top_10_Sales_Category
+Mar_order_table<-Mar_order_table[order(-Mar_order_table$Mar_orders),]
+Mar_Top_10_Sales_Category<-Mar_order_table[1:10,]
+Mar_Top_10_Sales_Category
+```
+
+```{r}
+#Visualizing the  top 10 results
+
+library(ggplot2)
+
+# January
+Jan_top_10<-ggplot(data = Jan_Top_10_Sales_Category,aes(x=reorder(Category,Jan_orders),y=Jan_orders,fill="Category"))+geom_bar(position = "dodge",stat="identity",fill="red",colour="black")+coord_flip()+xlab("Category of Products")+ylab("Total Sales per category")+ggtitle("Top 10  Products Sales Category of January")
+
+print(Jan_top_10)
+
+#Visualizing top 20 sold products in January
+Jan_top_20_products<-Jan_Order_Prod_desc[1:20,]
+
+Jan_top_20<-ggplot(data = Jan_top_20_products,aes(x=reorder(Product,Jan_orders),y=Jan_orders,fill="Product"))+geom_bar(position = "dodge",stat="identity",fill="yellow",colour="black")+coord_flip()+xlab(" Products Sold ")+ylab("Total Sales per product")+ggtitle("Top 20  products sold in January")
+
+print(Jan_top_20)
+
+
+#February
+
+Feb_top_10<-ggplot(data = Feb_Top_10_Sales_Category,aes(x=reorder(Category,Feb_orders),y=Feb_orders,fill="Category"))+geom_bar(position = "dodge",stat="identity",colour="black")+coord_flip()+xlab("Category of Products")+ylab("Total Sales per category")+ggtitle("Top 10  Products Sales Category of February")
+
+print(Feb_top_10)
+
+#Visualizing top 20 sold products in February
+Feb_top_20_products<-Feb_Order_Prod_desc[1:20,]
+
+Feb_top_20<-ggplot(data = Feb_top_20_products,aes(x=reorder(Product,Feb_orders),y=Feb_orders,fill="Product"))+geom_bar(position = "dodge",stat="identity",fill="blue",colour="black")+coord_flip()+xlab(" Products Sold ")+ylab("Total Sales per product")+ggtitle("Top 20  products sold in February")
+
+print(Feb_top_20)
+
+#March
+
+Mar_top_10<-ggplot(data = Mar_Top_10_Sales_Category,aes(x=reorder(Category,Mar_orders),y=Mar_orders,fill="Category"))+geom_bar(position = "dodge",stat="identity",fill="green",colour="black")+coord_flip()+xlab("Category of Products")+ylab("Total Sales per category")+ggtitle("Top 10  Products Sales Category of March")
+
+print(Mar_top_10)
+
+#Visualizing top 20 sold products in March
+Mar_top_20_products<-Mar_Order_Prod_desc[1:20,]
+
+Mar_top_20<-ggplot(data = Mar_top_20_products,aes(x=reorder(Product,Mar_orders),y=Mar_orders,fill="Product"))+geom_bar(position = "dodge",stat="identity",fill="orange",colour="black")+coord_flip()+xlab(" Products Sold ")+ylab("Total Sales per product")+ggtitle("Top 20  products sold in March")
+
+print(Mar_top_20)

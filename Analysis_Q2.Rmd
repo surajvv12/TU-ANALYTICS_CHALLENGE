@@ -1,0 +1,415 @@
+---
+title: "Analysis_Q2"
+author: "Suraj Vidyadaran"
+date: "Tuesday, October 27, 2015"
+output: html_document
+---
+
+#Q2)How effective are QVC's campaign in driving product sales?
+
+```{r,echo=FALSE}
+# Merge Sales Data with
+order_January<-merge(order_January,customer_master,by="CUSTOMER_NBR")
+head(order_January)
+order_February<-merge(order_February,customer_master,by="CUSTOMER_NBR")
+order_March<-merge(order_March,customer_master,by="CUSTOMER_NBR")
+```
+
+```{r,eval=FALSE,echo=FALSE}
+
+
+new_customers_Jan<-as.data.frame(table(order_January$NEW_CUSTOMER_IND))
+colnames(new_customers_Jan)<-c("New","Numbers")
+#February
+new_customers_Feb<-as.data.frame(table(order_February$NEW_CUSTOMER_IND))
+colnames(new_customers_Feb)<-c("New","Numbers")
+#March
+new_customers_Mar<-as.data.frame(table(order_March$NEW_CUSTOMER_IND))
+colnames(new_customers_Mar)<-c("New","Numbers")
+```
+
+
+
+###No of new customers in 3 months
+
+#####January
+```{r,echo=FALSE}
+library(ggplot2)
+new_customers_Jan
+ggplot(new_customers_Jan,aes(x=New,y=Numbers,fill=New))+geom_bar(stat = "identity")+geom_text(aes(label=Numbers))
+````
+
+
+####February
+
+```{r,echo=FALSE}
+
+new_customers_Feb
+ggplot(new_customers_Feb,aes(x=New,y=Numbers,fill=New))+geom_bar(stat = "identity")+geom_text(aes(label=Numbers))
+```
+
+
+#### March
+```{r,echo=FALSE}
+ ggplot(new_customers_Mar,aes(x=New,y=Numbers,fill=New))+geom_bar(stat = "identity")+geom_text(aes(label=Numbers))
+```
+
+```{r,eval=FALSE,echo=FALSE}
+#Subset product airtime based on product category
+
+#For the month of January
+
+product_airtime_Jan_Apparel<-product_airtime_Jan[product_airtime_Jan$PRODUCT_CATEGORY=="Apparel",]
+ product_airtime_Jan_home_decor<-product_airtime_Jan[product_airtime_Jan$PRODUCT_CATEGORY=="Home Decor",]
+product_airtime_Jan_health_beauty<-product_airtime_Jan[product_airtime_Jan$PRODUCT_CATEGORY=="Health/Beauty",]
+ product_airtime_Jan_Accessories<-product_airtime_Jan[product_airtime_Jan$PRODUCT_CATEGORY=="Accessories",]
+product_airtime_Jan_Jewelry<-product_airtime_Jan[product_airtime_Jan$PRODUCT_CATEGORY=="Jewelry",]
+product_airtime_Jan_housewares<-product_airtime_Jan[product_airtime_Jan$PRODUCT_CATEGORY=="Housewares",]
+product_airtime_Jan_textile_furnit<-product_airtime_Jan[product_airtime_Jan$PRODUCT_CATEGORY=="Textile/Furnit",]
+product_airtime_Jan_fun_leisure<-product_airtime_Jan[product_airtime_Jan$PRODUCT_CATEGORY=="Fun & Leisure",]
+product_airtime_Jan_IQVC_div<-product_airtime_Jan[product_airtime_Jan$PRODUCT_CATEGORY=="IQVC Divisional",]
+ product_airtime_Jan_Elec<-product_airtime_Jan[product_airtime_Jan$PRODUCT_CATEGORY=="Electronics",]
+
+#For the month of February
+
+product_airtime_Feb_Apparel<-product_airtime_Feb[product_airtime_Feb$PRODUCT_CATEGORY=="Apparel",]
+product_airtime_Feb_home_decor<-product_airtime_Feb[product_airtime_Feb$PRODUCT_CATEGORY=="Home Decor",]
+product_airtime_Feb_health_beauty<-product_airtime_Feb[product_airtime_Feb$PRODUCT_CATEGORY=="Health/Beauty",]
+product_airtime_Feb_Accessories<-product_airtime_Feb[product_airtime_Feb$PRODUCT_CATEGORY=="Accessories",]
+product_airtime_Feb_Jewelry<-product_airtime_Feb[product_airtime_Feb$PRODUCT_CATEGORY=="Jewelry",]
+product_airtime_Feb_housewares<-product_airtime_Feb[product_airtime_Feb$PRODUCT_CATEGORY=="Housewares",]
+product_airtime_Feb_textile_furnit<-product_airtime_Feb[product_airtime_Feb$PRODUCT_CATEGORY=="Textile/Furnit",]
+product_airtime_Feb_fun_leisure<-product_airtime_Feb[product_airtime_Feb$PRODUCT_CATEGORY=="Fun & Leisure",]
+product_airtime_Feb_IQVC_div<-product_airtime_Feb[product_airtime_Feb$PRODUCT_CATEGORY=="IQVC Divisional",]
+product_airtime_Feb_Elec<-product_airtime_Feb[product_airtime_Feb$PRODUCT_CATEGORY=="Electronics",]
+
+#For the month of March
+
+product_airtime_Mar_Apparel<-product_airtime_March[product_airtime_March$PRODUCT_CATEGORY=="Apparel",]
+product_airtime_Mar_home_decor<-product_airtime_March[product_airtime_March$PRODUCT_CATEGORY=="Home Decor",]
+product_airtime_Mar_health_beauty<-product_airtime_March[product_airtime_March$PRODUCT_CATEGORY=="Health/Beauty",]
+product_airtime_Mar_Accessories<-product_airtime_March[product_airtime_March$PRODUCT_CATEGORY=="Accessories",]
+product_airtime_Mar_Jewelry<-product_airtime_March[product_airtime_March$PRODUCT_CATEGORY=="Jewelry",]
+product_airtime_Mar_housewares<-product_airtime_March[product_airtime_March$PRODUCT_CATEGORY=="Housewares",]
+product_airtime_Mar_textile_furnit<-product_airtime_March[product_airtime_March$PRODUCT_CATEGORY=="Textile/Furnit",]
+product_airtime_Mar_fun_leisure<-product_airtime_March[product_airtime_March$PRODUCT_CATEGORY=="Fun & Leisure",]
+product_airtime_Mar_IQVC_div<-product_airtime_March[product_airtime_March$PRODUCT_CATEGORY=="IQVC Divisional",]
+product_airtime_Mar_Elec<-product_airtime_March[product_airtime_March$PRODUCT_CATEGORY=="Electronics",]
+```
+
+
+
+##Analysis of each of the product category separately
+
+###1)Apparel Category
+
+```{r}
+
+library(ggplot2)
+library(grid)
+library(gridExtra)
+
+Jan_total_airtime_apparel<-sum(product_airtime_Jan_Apparel$ONAIR_MINS)
+Jan_total_airtime_apparel
+Feb_total_airtime_apparel<-sum(product_airtime_Feb_Apparel$ONAIR_MINS)
+Feb_total_airtime_apparel
+Mar_total_airtime_apparel<-sum(product_airtime_Mar_Apparel$ONAIR_MINS)
+Mar_total_airtime_apparel
+email_Jan_apparel<-email_campaign_January[grep("Apparel",email_campaign_January$PRODUCT_CATEGORY),]
+email_Jan_expense<-sum(email_Jan_apparel$CAMPAIGN_SPEND)
+email_Feb_apparel<-email_campaign_February[grep("Apparel",email_campaign_February$PRODUCT_CATEGORY),]
+email_Feb_expense<-sum(email_Feb_apparel$CAMPAIGN_SPEND)
+email_Mar_apparel<-email_campaign_March[grep("Apparel",email_campaign_March$PRODUCT_CATEGORY),]
+email_Mar_expense<-sum(email_Mar_apparel$CAMPAIGN_SPEND)
+
+Air_time<-c(Jan_total_airtime_apparel,Feb_total_airtime_apparel,Mar_total_airtime_apparel)
+Sales<-t(Compare_orders[2,2:4])
+Months<-c("Jan,2015","Feb,2015","Mar,2015")
+email_expenditure<-c(email_Jan_expense,email_Feb_expense,email_Mar_expense)
+
+Apparel<-as.data.frame(cbind(Months,Sales,Air_time,email_expenditure),row.names = FALSE)
+colnames(Apparel)<-c("Month","Sales","Air_time","Email_expenses")
+Apparel
+Apparel$Sales<-as.numeric(as.character(Apparel$Sales))
+Apparel$Air_time<-as.numeric(as.character(Apparel$Air_time))
+Apparel$Email_expenses<-as.numeric(as.character(Apparel$Email_expenses))
+
+p1<-ggplot(Apparel,aes(x=reorder(Month,Email_expenses),y=Email_expenses,group=1))+geom_line(color="darkgreen",size=2)+geom_point()+ggtitle("Email Campaign expenses of Apparel Category")+xlab("Month")+ylab("Email campaign expenditure")
+p2<-ggplot(Apparel,aes(x=reorder(Month,Email_expenses),y=Air_time,group=1))+geom_line(color="blue",size=2)+geom_point()+ggtitle("Product Air Time for Apparel Category")+xlab("Month")+ylab("Total airtime for the category")
+p3<-ggplot(Apparel,aes(x=reorder(Month,Sales),y=Sales,group=1))+geom_line(color="red",size=2)+geom_point()+ggtitle("Sales for Apparel Category")+xlab("Month")+ylab("Total Sales")
+grid.arrange(p1,p2,p3,nrow=3)
+```
+
+###2)Home Decor Category
+
+```{r}
+
+library(ggplot2)
+library(grid)
+library(gridExtra)
+
+Jan_total_airtime_home_decor<-sum(product_airtime_Jan_home_decor$ONAIR_MINS)
+Jan_total_airtime_home_decor
+Feb_total_airtime_home_decor<-sum(product_airtime_Feb_home_decor$ONAIR_MINS)
+Feb_total_airtime_home_decor
+Mar_total_airtime_home_decor<-sum(product_airtime_Mar_home_decor$ONAIR_MINS)
+Mar_total_airtime_home_decor
+email_Jan_home_decor<-email_campaign_January[grep("Home",email_campaign_January$PRODUCT_CATEGORY),]
+email_Jan_expense<-sum(email_Jan_home_decor$CAMPAIGN_SPEND)
+email_Feb_home_decor<-email_campaign_February[grep("Home",email_campaign_February$PRODUCT_CATEGORY),]
+email_Feb_expense<-sum(email_Feb_home_decor$CAMPAIGN_SPEND)
+email_Mar_home_decor<-email_campaign_March[grep("Home",email_campaign_March$PRODUCT_CATEGORY),]
+email_Mar_expense<-sum(email_Mar_home_decor$CAMPAIGN_SPEND)
+
+Air_time<-c(Jan_total_airtime_home_decor,Feb_total_airtime_home_decor,Mar_total_airtime_home_decor)
+Sales<-t(Compare_orders[1,2:4])
+Months<-c("Jan,2015","Feb,2015","Mar,2015")
+email_expenditure<-c(email_Jan_expense,email_Feb_expense,email_Mar_expense)
+
+home_Decor<-as.data.frame(cbind(Months,Sales,Air_time,email_expenditure),row.names = FALSE)
+colnames(home_Decor)<-c("Month","Sales","Air_time","Email_expenses")
+home_Decor
+home_Decor$Sales<-as.numeric(as.character(home_Decor$Sales))
+home_Decor$Air_time<-as.numeric(as.character(home_Decor$Air_time))
+home_Decor$Email_expenses<-as.numeric(as.character(home_Decor$Email_expenses))
+
+p1<-ggplot(home_Decor,aes(x=reorder(Month,Email_expenses),y=Email_expenses,group=1))+geom_line(color="darkgreen",size=2)+geom_point()+ggtitle("Email Campaign expenses of Home Decor Category")+xlab("Month")+ylab("Email campaign expenditure")
+p2<-ggplot(home_Decor,aes(x=reorder(Month,Email_expenses),y=Air_time,group=1))+geom_line(color="blue",size=2)+geom_point()+ggtitle("Product Air Time for Home Decor Category")+xlab("Month")+ylab("Total airtime for the category")
+p3<-ggplot(home_Decor,aes(x=reorder(Month,Sales),y=Sales,group=1))+geom_line(color="red",size=2)+geom_point()+ggtitle("Sales for Home Decor Category")+xlab("Month")+ylab("Total Sales")
+grid.arrange(p1,p2,p3,nrow=3)
+```
+
+###3)Health/Beauty Category
+
+```{r}
+
+library(ggplot2)
+library(grid)
+library(gridExtra)
+
+Jan_total_airtime_health_beauty<-sum(product_airtime_Jan_health_beauty$ONAIR_MINS)
+Jan_total_airtime_health_beauty
+Feb_total_airtime_health_beauty<-sum(product_airtime_Feb_health_beauty$ONAIR_MINS)
+Feb_total_airtime_health_beauty
+Mar_total_airtime_health_beauty<-sum(product_airtime_Mar_health_beauty$ONAIR_MINS)
+Mar_total_airtime_health_beauty
+email_Jan_health_beauty<-email_campaign_January[grep("Beauty",email_campaign_January$PRODUCT_CATEGORY),]
+email_Jan_expense<-sum(email_Jan_health_beauty$CAMPAIGN_SPEND)
+email_Feb_health_beauty<-email_campaign_February[grep("Beauty",email_campaign_February$PRODUCT_CATEGORY),]
+email_Feb_expense<-sum(email_Feb_health_beauty$CAMPAIGN_SPEND)
+email_Mar_health_beauty<-email_campaign_March[grep("Beauty",email_campaign_March$PRODUCT_CATEGORY),]
+email_Mar_expense<-sum(email_Mar_health_beauty$CAMPAIGN_SPEND)
+
+Air_time<-c(Jan_total_airtime_health_beauty,Feb_total_airtime_health_beauty,Mar_total_airtime_health_beauty)
+Sales<-t(Compare_orders[3,2:4])
+Months<-c("Jan,2015","Feb,2015","Mar,2015")
+email_expenditure<-c(email_Jan_expense,email_Feb_expense,email_Mar_expense)
+
+health_beauty<-as.data.frame(cbind(Months,Sales,Air_time,email_expenditure),row.names = FALSE)
+colnames(health_beauty)<-c("Month","Sales","Air_time","Email_expenses")
+health_beauty
+health_beauty$Sales<-as.numeric(as.character(health_beauty$Sales))
+health_beauty$Air_time<-as.numeric(as.character(health_beauty$Air_time))
+health_beauty$Email_expenses<-as.numeric(as.character(health_beauty$Email_expenses))
+
+p1<-ggplot(health_beauty,aes(x=reorder(Month,Email_expenses),y=Email_expenses,group=1))+geom_line(color="darkgreen",size=2)+geom_point()+ggtitle("Email Campaign expenses of Health/Beauty Category")+xlab("Month")+ylab("Email campaign expenditure")
+p2<-ggplot(health_beauty,aes(x=reorder(Month,Email_expenses),y=Air_time,group=1))+geom_line(color="blue",size=2)+geom_point()+ggtitle("Product Air Time for Health/Beauty Category")+xlab("Month")+ylab("Total airtime for the category")
+p3<-ggplot(health_beauty,aes(x=reorder(Month,Email_expenses),y=Sales,group=1))+geom_line(color="red",size=2)+geom_point()+ggtitle("Sales for Health/Beauty Category")+xlab("Month")+ylab("Total Sales")
+grid.arrange(p1,p2,p3,nrow=3)
+```
+
+###4)Accessories
+
+```{r}
+
+library(ggplot2)
+library(grid)
+library(gridExtra)
+
+Jan_total_airtime_Accessories<-sum(product_airtime_Jan_Accessories$ONAIR_MINS)
+Jan_total_airtime_Accessories
+Feb_total_airtime_Accessories<-sum(product_airtime_Feb_Accessories$ONAIR_MINS)
+Feb_total_airtime_Accessories
+Mar_total_airtime_Accessories<-sum(product_airtime_Mar_Accessories$ONAIR_MINS)
+Mar_total_airtime_Accessories
+email_Jan_Accessories<-email_campaign_January[grep("Accessories",email_campaign_January$PRODUCT_CATEGORY),]
+email_Jan_expense<-sum(email_Jan_Accessories$CAMPAIGN_SPEND)
+email_Feb_Accessories<-email_campaign_February[grep("Accessories",email_campaign_February$PRODUCT_CATEGORY),]
+email_Feb_expense<-sum(email_Feb_Accessories$CAMPAIGN_SPEND)
+email_Mar_Accessories<-email_campaign_March[grep("Accessories",email_campaign_March$PRODUCT_CATEGORY),]
+email_Mar_expense<-sum(email_Mar_Accessories$CAMPAIGN_SPEND)
+
+Air_time<-c(Jan_total_airtime_Accessories,Feb_total_airtime_Accessories,Mar_total_airtime_Accessories)
+Sales<-t(Compare_orders[4,2:4])
+Months<-c("Jan,2015","Feb,2015","Mar,2015")
+email_expenditure<-c(email_Jan_expense,email_Feb_expense,email_Mar_expense)
+
+Accessories<-as.data.frame(cbind(Months,Sales,Air_time,email_expenditure),row.names = FALSE)
+colnames(Accessories)<-c("Month","Sales","Air_time","Email_expenses")
+Accessories
+Accessories$Sales<-as.numeric(as.character(Accessories$Sales))
+Accessories$Air_time<-as.numeric(as.character(Accessories$Air_time))
+Accessories$Email_expenses<-as.numeric(as.character(Accessories$Email_expenses))
+
+p1<-ggplot(Accessories,aes(x=reorder(Month,Air_time),y=Email_expenses,group=1))+geom_line(color="darkgreen",size=2)+geom_point()+ggtitle("Email Campaign expenses of Accessories Category")+xlab("Month")+ylab("Email campaign expenditure")
+p2<-ggplot(Accessories,aes(x=reorder(Month,Email_expenses),y=Air_time,group=1))+geom_line(color="blue",size=2)+geom_point()+ggtitle("Product Air Time for Accessories Category")+xlab("Month")+ylab("Total airtime for the category")
+p3<-ggplot(Accessories,aes(x=reorder(Month,Email_expenses),y=Sales,group=1))+geom_line(color="red",size=2)+geom_point()+ggtitle("Sales for Accessories Category")+xlab("Month")+ylab("Total Sales")
+grid.arrange(p1,p2,p3,nrow=3)
+```
+
+
+###5)Jewelry
+
+```{r}
+
+library(ggplot2)
+library(grid)
+library(gridExtra)
+
+Jan_total_airtime_Jewelry<-sum(product_airtime_Jan_Jewelry$ONAIR_MINS)
+Jan_total_airtime_Jewelry
+Feb_total_airtime_Jewelry<-sum(product_airtime_Feb_Jewelry$ONAIR_MINS)
+Feb_total_airtime_Jewelry
+Mar_total_airtime_Jewelry<-sum(product_airtime_Mar_Jewelry$ONAIR_MINS)
+Mar_total_airtime_Jewelry
+email_Jan_Jewelry<-email_campaign_January[grep("Jewelry",email_campaign_January$PRODUCT_CATEGORY),]
+email_Jan_expense<-sum(email_Jan_Jewelry$CAMPAIGN_SPEND)
+email_Feb_Jewelry<-email_campaign_February[grep("Jewelry",email_campaign_February$PRODUCT_CATEGORY),]
+email_Feb_expense<-sum(email_Feb_Jewelry$CAMPAIGN_SPEND)
+email_Mar_Jewelry<-email_campaign_March[grep("Jewelry",email_campaign_March$PRODUCT_CATEGORY),]
+email_Mar_expense<-sum(email_Mar_Jewelry$CAMPAIGN_SPEND)
+
+Air_time<-c(Jan_total_airtime_Jewelry,Feb_total_airtime_Jewelry,Mar_total_airtime_Jewelry)
+Sales<-t(Compare_orders[5,2:4])
+Months<-c("Jan,2015","Feb,2015","Mar,2015")
+email_expenditure<-c(email_Jan_expense,email_Feb_expense,email_Mar_expense)
+
+Jewelry<-as.data.frame(cbind(Months,Sales,Air_time,email_expenditure),row.names = FALSE)
+colnames(Jewelry)<-c("Month","Sales","Air_time","Email_expenses")
+Jewelry
+Jewelry$Sales<-as.numeric(as.character(Jewelry$Sales))
+Jewelry$Air_time<-as.numeric(as.character(Jewelry$Air_time))
+Jewelry$Email_expenses<-as.numeric(as.character(Jewelry$Email_expenses))
+
+p1<-ggplot(Jewelry,aes(x=reorder(Month,Email_expenses),y=Email_expenses,group=1))+geom_line(color="darkgreen",size=2)+geom_point()+ggtitle("Email Campaign expenses of Jewelry Category")+xlab("Month")+ylab("Email campaign expenditure")
+p2<-ggplot(Jewelry,aes(x=reorder(Month,Email_expenses),y=Air_time,group=1))+geom_line(color="blue",size=2)+geom_point()+ggtitle("Product Air Time for Jewelry Category")+xlab("Month")+ylab("Total airtime for the category")
+p3<-ggplot(Jewelry,aes(x=reorder(Month,Email_expenses),y=Sales,group=1))+geom_line(color="red",size=2)+geom_point()+ggtitle("Sales for Jewelry Category")+xlab("Month")+ylab("Total Sales")
+grid.arrange(p1,p2,p3,nrow=3)
+```
+
+###6)Housewares
+
+```{r}
+
+library(ggplot2)
+library(grid)
+library(gridExtra)
+
+Jan_total_airtime_housewares<-sum(product_airtime_Jan_housewares$ONAIR_MINS)
+Jan_total_airtime_housewares
+Feb_total_airtime_housewares<-sum(product_airtime_Feb_housewares$ONAIR_MINS)
+Feb_total_airtime_housewares
+Mar_total_airtime_housewares<-sum(product_airtime_Mar_housewares$ONAIR_MINS)
+Mar_total_airtime_housewares
+email_Jan_housewares<-email_campaign_January[grep("All",email_campaign_January$PRODUCT_CATEGORY),]
+email_Jan_expense<-sum(email_Jan_housewares$CAMPAIGN_SPEND)
+email_Feb_housewares<-email_campaign_February[grep("All",email_campaign_February$PRODUCT_CATEGORY),]
+email_Feb_expense<-sum(email_Feb_housewares$CAMPAIGN_SPEND)
+email_Mar_housewares<-email_campaign_March[grep("All",email_campaign_March$PRODUCT_CATEGORY),]
+email_Mar_expense<-sum(email_Mar_housewares$CAMPAIGN_SPEND)
+
+Air_time<-c(Jan_total_airtime_housewares,Feb_total_airtime_housewares,Mar_total_airtime_housewares)
+Sales<-t(Compare_orders[6,2:4])
+Months<-c("Jan,2015","Feb,2015","Mar,2015")
+email_expenditure<-c(email_Jan_expense,email_Feb_expense,email_Mar_expense)
+
+housewares<-as.data.frame(cbind(Months,Sales,Air_time,email_expenditure),row.names = FALSE)
+colnames(housewares)<-c("Month","Sales","Air_time","Email_expenses")
+housewares
+housewares$Sales<-as.numeric(as.character(housewares$Sales))
+housewares$Air_time<-as.numeric(as.character(housewares$Air_time))
+housewares$Email_expenses<-as.numeric(as.character(housewares$Email_expenses))
+
+p1<-ggplot(housewares,aes(x=reorder(Month,Email_expenses),y=Email_expenses,group=1))+geom_line(color="darkgreen",size=2)+geom_point()+ggtitle("Email Campaign expenses of Housewares Category")+xlab("Month")+ylab("Email campaign expenditure")
+p2<-ggplot(housewares,aes(x=reorder(Month,Email_expenses),y=Air_time,group=1))+geom_line(color="blue",size=2)+geom_point()+ggtitle("Product Air Time for Housewares Category")+xlab("Month")+ylab("Total airtime for the category")
+p3<-ggplot(housewares,aes(x=reorder(Month,Email_expenses),y=Sales,group=1))+geom_line(color="red",size=2)+geom_point()+ggtitle("Sales for Housewares Category")+xlab("Month")+ylab("Total Sales")
+grid.arrange(p1,p2,p3,nrow=3)
+```
+
+###7)Textile/Furnit
+
+```{r}
+
+library(ggplot2)
+library(grid)
+library(gridExtra)
+
+Jan_total_airtime_textile_furnit<-sum(product_airtime_Jan_textile_furnit$ONAIR_MINS)
+Jan_total_airtime_textile_furnit
+Feb_total_airtime_textile_furnit<-sum(product_airtime_Feb_textile_furnit$ONAIR_MINS)
+Feb_total_airtime_textile_furnit
+Mar_total_airtime_textile_furnit<-sum(product_airtime_Mar_textile_furnit$ONAIR_MINS)
+Mar_total_airtime_textile_furnit
+email_Jan_textile_furnit<-email_campaign_January[grep("All",email_campaign_January$PRODUCT_CATEGORY),]
+email_Jan_expense<-sum(email_Jan_textile_furnit$CAMPAIGN_SPEND)
+email_Feb_textile_furnit<-email_campaign_February[grep("All",email_campaign_February$PRODUCT_CATEGORY),]
+email_Feb_expense<-sum(email_Feb_textile_furnit$CAMPAIGN_SPEND)
+email_Mar_textile_furnit<-email_campaign_March[grep("All",email_campaign_March$PRODUCT_CATEGORY),]
+email_Mar_expense<-sum(email_Mar_textile_furnit$CAMPAIGN_SPEND)
+
+Air_time<-c(Jan_total_airtime_textile_furnit,Feb_total_airtime_textile_furnit,Mar_total_airtime_textile_furnit)
+Sales<-t(Compare_orders[7,2:4])
+Months<-c("Jan,2015","Feb,2015","Mar,2015")
+email_expenditure<-c(email_Jan_expense,email_Feb_expense,email_Mar_expense)
+
+textile_furnit<-as.data.frame(cbind(Months,Sales,Air_time,email_expenditure),row.names = FALSE)
+colnames(textile_furnit)<-c("Month","Sales","Air_time","Email_expenses")
+textile_furnit
+textile_furnit$Sales<-as.numeric(as.character(textile_furnit$Sales))
+textile_furnit$Air_time<-as.numeric(as.character(textile_furnit$Air_time))
+textile_furnit$Email_expenses<-as.numeric(as.character(textile_furnit$Email_expenses))
+
+p1<-ggplot(textile_furnit,aes(x=reorder(Month,Email_expenses),y=Email_expenses,group=1))+geom_line(color="darkgreen",size=2)+geom_point()+ggtitle("Email Campaign expenses of Textile/Furnit Category")+xlab("Month")+ylab("Email campaign expenditure")
+p2<-ggplot(textile_furnit,aes(x=reorder(Month,Email_expenses),y=Air_time,group=1))+geom_line(color="blue",size=2)+geom_point()+ggtitle("Product Air Time for Textile/Furnit Category")+xlab("Month")+ylab("Total airtime for the category")
+p3<-ggplot(textile_furnit,aes(x=reorder(Month,Email_expenses),y=Sales,group=1))+geom_line(color="red",size=2)+geom_point()+ggtitle("Sales for Textile/Furnit Category")+xlab("Month")+ylab("Total Sales")
+grid.arrange(p1,p2,p3,nrow=3)
+```
+
+###7)Fun & Leisure
+
+```{r}
+
+library(ggplot2)
+library(grid)
+library(gridExtra)
+
+Jan_total_airtime_fun_leisure<-sum(product_airtime_Jan_fun_leisure$ONAIR_MINS)
+Jan_total_airtime_fun_leisure
+Feb_total_airtime_fun_leisure<-sum(product_airtime_Feb_fun_leisure$ONAIR_MINS)
+Feb_total_airtime_fun_leisure
+Mar_total_airtime_fun_leisure<-sum(product_airtime_Mar_fun_leisure$ONAIR_MINS)
+Mar_total_airtime_fun_leisure
+email_Jan_fun_leisure<-email_campaign_January[grep("All",email_campaign_January$PRODUCT_CATEGORY),]
+email_Jan_expense<-sum(email_Jan_fun_leisure$CAMPAIGN_SPEND)
+email_Feb_fun_leisure<-email_campaign_February[grep("All",email_campaign_February$PRODUCT_CATEGORY),]
+email_Feb_expense<-sum(email_Feb_fun_leisure$CAMPAIGN_SPEND)
+email_Mar_fun_leisure<-email_campaign_March[grep("All",email_campaign_March$PRODUCT_CATEGORY),]
+email_Mar_expense<-sum(email_Mar_fun_leisure$CAMPAIGN_SPEND)
+
+Air_time<-c(Jan_total_airtime_fun_leisure,Feb_total_airtime_fun_leisure,Mar_total_airtime_fun_leisure)
+Sales<-t(Compare_orders[8,2:4])
+Months<-c("Jan,2015","Feb,2015","Mar,2015")
+email_expenditure<-c(email_Jan_expense,email_Feb_expense,email_Mar_expense)
+
+fun_leisure<-as.data.frame(cbind(Months,Sales,Air_time,email_expenditure),row.names = FALSE)
+colnames(fun_leisure)<-c("Month","Sales","Air_time","Email_expenses")
+fun_leisure
+fun_leisure$Sales<-as.numeric(as.character(fun_leisure$Sales))
+fun_leisure$Air_time<-as.numeric(as.character(fun_leisure$Air_time))
+fun_leisure$Email_expenses<-as.numeric(as.character(fun_leisure$Email_expenses))
+
+p1<-ggplot(fun_leisure,aes(x=reorder(Month,Email_expenses),y=Email_expenses,group=1))+geom_line(color="darkgreen",size=2)+geom_point()+ggtitle("Email Campaign expenses of Fun/Leisure Category")+xlab("Month")+ylab("Email campaign expenditure")
+p2<-ggplot(fun_leisure,aes(x=reorder(Month,Email_expenses),y=Air_time,group=1))+geom_line(color="blue",size=2)+geom_point()+ggtitle("Product Air Time for Fun/Leisure Category")+xlab("Month")+ylab("Total airtime for the category")
+p3<-ggplot(fun_leisure,aes(x=reorder(Month,Email_expenses),y=Sales,group=1))+geom_line(color="red",size=2)+geom_point()+ggtitle("Sales for Fun/Leisure Category")+xlab("Month")+ylab("Total Sales")
+grid.arrange(p1,p2,p3,nrow=3)
+```
